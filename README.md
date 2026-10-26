@@ -1,15 +1,17 @@
 # ClaimSense — The Offline AI Health Insurance Claim Estimator
 
 [![Hacktoberfest 2026](https://img.shields.io/badge/Hacktoberfest-2026-blue.svg)](https://hacktoberfest.com/)
-[![Local AI](https://img.shields.io/badge/AI-Ollama%20%7C%20Gemma%204-purple.svg)](https://ollama.com/)
+[![Local AI](https://img.shields.io/badge/AI-Ollama%20%7C%20ClaimSense%20(Gemma%202)-purple.svg)](https://ollama.com/)
 [![Python](https://img.shields.io/badge/Python-3.11%2B%20%7C%20FastAPI-green.svg)](https://fastapi.tiangolo.com/)
 [![Frontend](https://img.shields.io/badge/React%2019-TypeScript%20%7C%20Tailwind-blue.svg)](https://react.dev/)
+[![Production](https://img.shields.io/badge/Vercel-Live%20Deployment-success.svg)](https://hacktopefestsubmit.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > **Event:** Hacktoberfest 2026 Hack Day  
 > **Organizers:** Pune × NIAT-ADYPU  
 > **Date:** October 26, 2026  
 > **Project Category:** Local AI, Open Source, Healthcare Technology, Financial Transparency  
+> **Live Production URL:** [https://hacktopefestsubmit.vercel.app](https://hacktopefestsubmit.vercel.app)  
 
 ---
 
@@ -17,21 +19,21 @@
 
 **ClaimSense** is a local-first healthcare-fintech application that protects Indian families from surprise out-of-pocket hospital bills caused by hidden insurance clauses: **room-rent limits, proportionate deductions, and co-payment penalties**.
 
-In India, choosing a hospital room just ₹3,000 above your policy's daily limit can penalize your entire medical bill by **37.5%**, resulting in tens of thousands of rupees in out-of-pocket costs. ClaimSense helps families answer five critical questions before admission:
+In India, choosing a hospital room just ₹3,000 above your policy's daily limit can penalize your entire medical bill by **37.5%**, resulting in tens of thousands of rupees in out-of-pocket costs. ClaimSense answers five critical questions before hospital admission:
 
 1. **How much of the hospital bill will the insurer likely pay?**
 2. **How much will our family have to pay out of pocket?**
-3. **How does choosing a more expensive room affect surgeon and OT fees?**
-4. **Which available room tier reduces or eliminates our financial exposure?**
-5. **Which policy sub-limits, deductibles, or co-payments apply?**
+3. **How does choosing an upgraded room category penalize surgeon and OT charges?**
+4. **Which room category eliminates financial penalties?**
+5. **How can our family generate an authoritative TPA unbundling dispute letter before discharge?**
 
 ---
 
 ## 🛡️ Core Architectural Principles
 
-- **Language Models are for Language**: Locally running open-weight **Gemma 4 (via Ollama)** handles document extraction, unstructured policy interpretation, and multilingual plain-language explanations (English, Hindi, Marathi).
-- **Python is for Financial Arithmetic**: The AI model **never calculates financial results**. All currency arithmetic, eligibility ratios, proportionate penalties, and co-payments are derived deterministically in Python using integer paise and `Decimal` with `ROUND_HALF_UP`.
-- **Zero Cloud Data Leakage**: 100% offline. No data is ever transmitted to OpenAI, Google Cloud Gemini, or external cloud providers.
+- **Language Models are for Language**: Locally running open-weight **Gemma 2 (via Ollama)** handles document extraction, unstructured policy interpretation, TPA unbundling dispute letter generation, and multilingual plain-language explanations (English, Hindi, Marathi).
+- **Python is for Financial Arithmetic**: The AI model **never performs mathematical calculations**. All currency arithmetic, eligibility ratios, proportionate penalties, and co-payments are derived deterministically in Python using integer paise and `Decimal` with `ROUND_HALF_UP`.
+- **Zero Cloud Data Leakage**: 100% offline-ready. No medical data is sent to external cloud LLM providers.
 - **Three Mandatory Security Gates**:
   1. *Gate 1: Static Tool Allowlist* — Restricts model tool calls to registered functions; blocks arbitrary reflection or execution.
   2. *Gate 2: Argument Schema & Type Guards* — Pydantic validation rejects booleans as integers (`True` as paise) and enforces strict ranges.
@@ -39,78 +41,123 @@ In India, choosing a hospital room just ₹3,000 above your policy's daily limit
 
 ---
 
-## 🎯 The Primary Illustrative Scenario
-
-A family is planning a hospital admission:
-- **Policy Room-Rent Limit:** ₹5,000 / day
-- **Co-Payment:** 10%
-- **Selected Room:** ₹8,000 / day (Single Private AC Room)
-- **Duration:** 3 days (Room total: ₹24,000)
-- **Other Hospital Charges:** ₹1,20,000 (Surgeon fees, OT, anaesthesia, nursing)
-- **Total Hospital Bill:** ₹1,44,000
-
-### Deterministic Calculation Trace:
-1. **Room Eligibility Ratio:** `₹5,000 / ₹8,000 = 0.625` (37.5% penalty)
-2. **Eligible Room Charges:** `₹5,000 × 3 = ₹15,000`
-3. **Proportionate Adjustment on Other Charges:** `₹1,20,000 × 0.625 = ₹75,000` (₹45,000 lost)
-4. **Total Base Eligible Amount:** `₹15,000 + ₹75,000 = ₹90,000`
-5. **10% Co-Payment Deduction:** `₹90,000 × 10% = ₹9,000`
-6. **Estimated Insurer Payment:** `₹90,000 - ₹9,000 = ₹81,000`
-7. **Estimated Family Out-of-Pocket:** `₹1,44,000 - ₹81,000 = ₹63,000`
-
-> **Room Comparison Insight:** Choosing a Twin Sharing room (₹4,500/day) sits within the ₹5,000 limit, eliminates the proportionate deduction, and saves the family **₹49,650** out of pocket!
-
----
-
-## 🚀 Quickstart & Setup Guide
+## 🚀 Quickstart Guide (Step-by-Step From The Beginning)
 
 ### 1. Prerequisites
-- **Python 3.11+** installed
-- **Node.js 18+ & npm** installed
+- **Python 3.10+** (Python 3.11/3.12 recommended)
+- **Node.js 18+ & npm**
 - **Ollama** installed ([https://ollama.com](https://ollama.com))
-
-### 2. Ollama Setup (Local Model)
-Start Ollama and pull the Gemma 4 multimodal model:
-```bash
-# Start Ollama service (if not already running as daemon)
-ollama serve
-
-# Pull Gemma 4 model
-ollama pull gemma4:e4b
-```
-*(Note: ClaimSense includes graceful fallbacks. If Ollama is downloading or offline, deterministic calculations, manual entry, and verification suites remain 100% operational).*
-
-### 3. Backend Setup (FastAPI)
-```powershell
-# In project root
-python -m venv venv
-.\venv\Scripts\pip install -r backend/requirements.txt
-
-# Run backend server
-.\venv\Scripts\uvicorn app.main:app --app-dir backend --reload --port 8000
-```
-Backend API will be running at `http://127.0.0.1:8000` (Docs: `http://127.0.0.1:8000/api/docs`).
-
-### 4. Frontend Setup (React + Vite)
-```powershell
-# Open a new terminal in project root
-cd frontend
-npm install --legacy-peer-deps
-npm run dev
-```
-Frontend will be running at `http://localhost:5173`.
 
 ---
 
-## 🧪 Automated Verification Suite
+### 2. Model Setup with Ollama
 
-Run the full automated check suite verifying deterministic math, type guards, and security gates:
+Start the Ollama daemon and build the dedicated `claimsense` model with our custom `Modelfile` (trained on the ClaimSense SKILL system prompt):
 
 ```powershell
-.\venv\Scripts\python scripts/check_all.py
+# 1. Start Ollama service (if not already running)
+ollama serve
+
+# 2. Pull the base Gemma 2 model
+ollama pull gemma2:2b
+
+# 3. Create the custom claimsense model bundled with SKILL.md rules
+ollama create claimsense -f Modelfile
 ```
 
-### Actual Output:
+---
+
+### 3. Backend Setup (FastAPI)
+
+```powershell
+# In the project root:
+# 1. Create and activate a Python virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Start the FastAPI backend server
+uvicorn app.main:app --app-dir backend --reload --port 8000
+```
+- **Backend API**: `http://127.0.0.1:8000`
+- **Swagger Interactive API Docs**: `http://127.0.0.1:8000/api/docs`
+- **API Health Check**: `http://127.0.0.1:8000/api/health`
+
+---
+
+### 4. Frontend Setup (React 19 + Vite)
+
+In a new terminal window:
+
+```powershell
+# 1. Navigate to the frontend directory
+cd frontend
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the Vite development server
+npm run dev
+```
+- **Frontend App**: `http://localhost:5173`
+
+---
+
+## 💬 Terminal CLI Interface
+
+ClaimSense provides two terminal CLI experiences:
+
+### Option A: Direct Ollama CLI (`ollama run claimsense`)
+Chat directly with the trained ClaimSense model in your terminal:
+```powershell
+ollama run claimsense
+```
+*Ask questions like:*
+- *"How does proportionate deduction work for a ₹5,000 room rent cap?"*
+- *"Can a hospital tie surgeon charges to room category under IRDAI guidelines?"*
+- *"Draft a dispute letter for unbundling ICU nursing fees."*
+
+### Option B: Interactive Python CLI Agent (`scripts/cli_agent.py`)
+Combines local Ollama natural language understanding with the **authoritative Python financial calculation engine**:
+```powershell
+python scripts/cli_agent.py
+```
+**Interactive Commands:**
+- `/estimate` — Run interactive pre-admission financial calculation using integer paise math.
+- `/policies` — Browse 14 real-world and demo Indian health insurance policies.
+- `/skill` — Print the authoritative ClaimSense reasoning rules (`SKILL.md`).
+- `/help` — Show available commands.
+- `exit` or `quit` — Exit the terminal agent.
+
+---
+
+## 🧪 Testing AI Capabilities
+
+1. **Pre-Admission TPA Dispute Letter Generator**:
+   - Go to `Results Page` or click **"Generate Dispute Letter"**.
+   - Generates a formal legal letter citing IRDAI master circulars, disputing arbitrary surgeon and OT tariff inflation tied to room selection.
+2. **Real-World Policy Catalog & Risk Analysis**:
+   - Browse 14 authentic Indian health policies (HDFC ERGO Optima Secure, Star Health Comprehensive, Care Supreme, Niva Bupa ReAssure 2.0, New India Assurance, ICICI Lombard, etc.).
+   - Access **Policy Risk Analysis** with risk factors, coverage scores, and AI recommendations.
+3. **Multilingual Explanation Engine**:
+   - Switch between **English**, **Hindi (हिंदी)**, and **Marathi (मराठी)** in the header.
+   - All calculation results, warnings, and bill item breakdowns adapt dynamically.
+4. **Clean PDF Audit Report**:
+   - Click **"Print Report (PDF)"** to open the A4 print preview with clean page breaks, official audit banner, and full mathematical trace.
+
+---
+
+## 🔬 Automated Verification Suite
+
+Run the full verification suite confirming deterministic math, type guards, and security gates:
+
+```powershell
+python scripts/check_all.py
+```
+
+### Verification Output:
 ```text
 ============================================================
 ClaimSense Verification Suite: 9 / 9 seeded checks passed
@@ -132,44 +179,72 @@ ClaimSense Verification Suite: 9 / 9 seeded checks passed
 [PASS] Range Guard: Negative Amount Rejection
        Rejected negative currency amount.
 [PASS] Policy Configuration: policy.json Validation
-       Verified 4 valid profiles.
+       Verified 14 valid profiles.
 ============================================================
 ```
 
-Run pytest unit tests:
+Run pytest backend unit tests:
 ```powershell
-$env:PYTHONPATH="backend"
-.\venv\Scripts\python -m pytest backend/tests -v
-# 19 passed in 5.03s
+cd backend
+python -m pytest tests/ -v
+# 20 passed in 4.96s
 ```
+
+---
+
+## 🌐 Cloud Deployment (Vercel)
+
+ClaimSense is configured for full-stack serverless deployment on **Vercel** with:
+- **Frontend**: Prebuilt React Vite SPA (`frontend/dist`) served globally via Vercel Edge CDN.
+- **Backend**: FastAPI Python ASGI serverless runtime (`api/index.py`) handling all `/api/*` endpoints.
+
+### Deploying to Vercel:
+```powershell
+# 1. Install Vercel CLI (if not already installed)
+npm install -g vercel
+
+# 2. Deploy to Production
+vercel --prod --yes
+```
+
+### Optional Cloud Environment Variables (Vercel Project Settings):
+- `GEMINI_API_KEY`: *(Optional)* Enables hybrid cloud fallback for policy analysis and dispute letter generation if offline Ollama is unavailable.
+- `AI_PROVIDER`: `auto` (default), `ollama`, or `gemini`.
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-claimsense/
+hacktopefestsubmit/
 ├── .env.example               # Environment variables template
 ├── .gitignore                 # Safe gitignore (excludes sensitive files, uploads, .env)
+├── .vercelignore              # Deployment filter excluding virtualenvs & tests
+├── vercel.json                # Vercel SPA rewrites and serverless function config
 ├── Makefile                   # Make target automation
+├── Modelfile                  # Ollama custom model definition with SKILL.md
 ├── LICENSE                    # MIT License
 ├── CONTRIBUTING.md            # Contribution guidelines
 ├── SECURITY.md                # Security and threat model
 ├── README.md                  # Complete product documentation
 │
+├── api/
+│   └── index.py               # Vercel ASGI serverless entrypoint with rewrite middleware
+│
 ├── config/
-│   ├── policy.json            # Editable policy profiles with strict schema
+│   ├── policy.json            # 14 real-world and demo Indian health insurance policies
 │   └── room_categories.json   # Configurable room categories and default tariffs
 │
 ├── data/
-│   ├── demo_hospital_estimate.json # Hacktoberfest core illustrative scenario
-│   ├── sample_hospital_bill.png    # Realistic pre-generated synthetic hospital estimate
+│   ├── demo_hospital_estimate.json # Core illustrative scenario
+│   ├── sample_hospital_bill.png    # Pre-generated synthetic hospital bill
 │   └── test_cases.json             # Seeded unit and adversarial test scenarios
 │
 ├── scripts/
-│   ├── check_all.py           # Verification runner (reports real passed/failed checks)
-│   ├── check_ollama.py        # Ollama and Gemma 4 model connection checker
-│   └── seed_demo.py           # Generates synthetic sample hospital cost estimates
+│   ├── check_all.py           # Comprehensive 9-check verification runner
+│   ├── check_ollama.py        # Ollama and Gemma connection checker
+│   ├── cli_agent.py           # Interactive CLI agent with LLM + Python arithmetic
+│   └── seed_demo.py           # Generates synthetic sample hospital estimates
 │
 ├── docs/
 │   ├── ARCHITECTURE.md        # Technical architecture and boundaries
@@ -182,7 +257,7 @@ claimsense/
 │   ├── pyproject.toml
 │   ├── app/
 │   │   ├── main.py            # FastAPI entry point & CORS
-│   │   ├── config.py          # Settings & environment validation
+│   │   ├── config.py          # Settings, env validation & find_file helper
 │   │   ├── schemas.py         # Pydantic models for all contracts
 │   │   ├── exceptions.py      # Structured error handling
 │   │   ├── api/               # API routes (health, estimates, policies, documents, etc.)
@@ -190,7 +265,7 @@ claimsense/
 │   │   ├── calculation/       # Authoritative calculation engine (room_rent, proportionate, copay)
 │   │   ├── services/          # Policy, estimate, extraction, and verification services
 │   │   └── validation/        # Type guards, image security, policy validation
-│   └── tests/                 # Complete pytest test suite (19 tests)
+│   └── tests/                 # Complete pytest test suite (20 tests)
 │
 └── frontend/                  # React 19 + TypeScript + Tailwind CSS UI
     ├── package.json
@@ -199,7 +274,7 @@ claimsense/
     │   ├── App.tsx            # Routes configuration
     │   ├── context/           # EstimateContext state provider
     │   ├── services/api.ts    # Typed fetch API client
-    │   ├── pages/             # Dashboard, Estimate, Upload, Review, Results, Compare, Security
+    │   ├── pages/             # Dashboard, Estimate, Upload, Review, Results, Compare, Policy, Security
     │   └── components/layout/ # TopNavigation, Sidebar, FooterDisclaimer, AppShell
 ```
 
