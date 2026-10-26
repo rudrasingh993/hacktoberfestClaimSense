@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "currency": "INR",
+  "profiles": [
+    {
+      "policy_id": "demo-fixed-room-limit",
+      "insurer_name": "Demo Star Health Insurer",
+      "policy_name": "Illustrative Fixed Room Limit Policy",
+      "version": "demo-v1",
+      "room_limit_type": "fixed_daily",
+      "room_limit_value": 500000,
+      "proportionate_deduction_applicable": true,
+      "copay_percentage": 10,
+      "deductible_type": "none",
+      "deductible_value": 0,
+      "sum_insured_paise": 50000000,
+      "treatment_sub_limit_paise": null,
+      "rules_confirmed": true,
+      "source_note": "Illustrative test configuration with ₹5,000/day room rent limit and 10% co-payment; not a real insurer policy."
+    },
+    {
+      "policy_id": "demo-percentage-room-limit",
+      "insurer_name": "National Shield Insurance",
+      "policy_name": "Comprehensive Care 1% Room Limit",
+      "version": "demo-v1",
+      "room_limit_type": "percentage_of_sum_insured",
+      "room_limit_value": 1,
+      "proportionate_deduction_applicable": true,
+      "copay_percentage": 0,
+      "deductible_type": "none",
+      "deductible_value": 0,
+      "sum_insured_paise": 50000000,
+      "treatment_sub_limit_paise": null,
+      "rules_confirmed": true,
+      "source_note": "1% of Sum Insured (₹5,00,000 SI -> ₹5,000/day limit) with zero co-pay."
+    },
+    {
+      "policy_id": "demo-no-room-limit",
+      "insurer_name": "CareMax Health",
+      "policy_name": "Unlimited Room Premium Plan",
+      "version": "demo-v1",
+      "room_limit_type": "none",
+      "room_limit_value": null,
+      "proportionate_deduction_applicable": false,
+      "copay_percentage": 5,
+      "deductible_type": "none",
+      "deductible_value": 0,
+      "sum_insured_paise": 100000000,
+      "treatment_sub_limit_paise": null,
+      "rules_confirmed": true,
+      "source_note": "No room rent sub-limits or proportionate deductions. 5% co-pay applicable."
+    },
+    {
+      "policy_id": "demo-deductible-copay",
+      "insurer_name": "Apex Assurance",
+      "policy_name": "Top-Up Super Shield with Deductible",
+      "version": "demo-v1",
+      "room_limit_type": "fixed_daily",
+      "room_limit_value": 600000,
+      "proportionate_deduction_applicable": true,
+      "copay_percentage": 15,
+      "deductible_type": "fixed",
+      "deductible_value": 1000000,
+      "sum_insured_paise": 100000000,
+      "treatment_sub_limit_paise": 20000000,
+      "rules_confirmed": true,
+      "source_note": "₹6,000/day room limit, ₹10,000 fixed deductible, ₹2,00,000 treatment sub-limit, and 15% co-pay."
+    }
+  ]
+}

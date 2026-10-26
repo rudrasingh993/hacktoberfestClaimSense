@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "currency": "INR",
+  "categories": [
+    {
+      "id": "general_ward",
+      "name": "General Ward",
+      "description": "Multi-bed ward (4-8 beds) with shared nursing and facilities",
+      "default_daily_rate_paise": 250000,
+      "recommended_for": "Full coverage without out-of-pocket room rent deductions"
+    },
+    {
+      "id": "semi_private",
+      "name": "Twin Sharing (Semi-Private)",
+      "description": "Two-bed room with shared washroom and curtain partition",
+      "default_daily_rate_paise": 450000,
+      "recommended_for": "Balanced privacy, comfortably within most 1% sum insured / ₹5,000 limits"
+    },
+    {
+      "id": "private_single",
+      "name": "Single Private Room",
+      "description": "Individual patient room with attached washroom and attendant couch",
+      "default_daily_rate_paise": 800000,
+      "recommended_for": "Maximum privacy, but triggers proportionate deductions if limit is under ₹8,000"
+    },
+    {
+      "id": "deluxe_suite",
+      "name": "Deluxe Suite",
+      "description": "Spacious premium room with separate lounge area, pantry, and dedicated nurse",
+      "default_daily_rate_paise": 1500000,
+      "recommended_for": "High-end corporate or luxury admissions; substantial out-of-pocket exposure"
+    }
+  ]
+}

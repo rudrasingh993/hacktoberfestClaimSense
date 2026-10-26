@@ -1,0 +1,29 @@
+{
+  "hospital_name": "Sanjeevani Multispeciality Hospital",
+  "location": "Pune, Maharashtra",
+  "patient_name": "Rajesh Sharma",
+  "admission_type": "Planned Inpatient Surgery",
+  "treatment_category": "Laparoscopic General Surgery",
+  "policy_id": "demo-fixed-room-limit",
+  "room_category": "Single Private Room",
+  "room_rate_per_day_paise": 800000,
+  "room_days": 3,
+  "room_total_paise": 2400000,
+  "other_charges_paise": 12000000,
+  "excluded_charges_paise": 0,
+  "estimated_total_paise": 14400000,
+  "deposit_paise": 2000000,
+  "discount_paise": 0,
+  "notes": "Estimated pre-admission bill for 3 days stay in Single Private AC room including OT charges, surgeon fees, anaesthetist fees, and nursing care.",
+  "expected_outcome": {
+    "policy_room_limit_paise": 500000,
+    "eligibility_ratio": 0.625,
+    "eligible_room_charges_paise": 1500000,
+    "adjusted_other_charges_paise": 7500000,
+    "amount_before_copay_paise": 9000000,
+    "copay_percentage": 10,
+    "copay_deduction_paise": 900000,
+    "insurer_payment_paise": 8100000,
+    "family_payment_paise": 6300000
+  }
+}
