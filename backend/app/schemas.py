@@ -248,11 +248,16 @@ class PolicyRiskAnalysisRequest(BaseModel):
     estimated_bill_paise: int | None = None
 
 class PolicyRiskAnalysisResponse(BaseModel):
-    risk_level: Literal["LOW", "MODERATE", "HIGH", "CRITICAL"]
-    room_limit_risk_summary: str
-    hidden_penalties: list[str]
-    safe_room_threshold_rupees: int
-    recommended_action: str
+    model_config = ConfigDict(extra="ignore")
+    risk_level: Literal["LOW", "MODERATE", "HIGH", "CRITICAL"] = "LOW"
+    room_limit_risk_summary: str = ""
+    hidden_penalties: list[str] = Field(default_factory=list)
+    safe_room_threshold_rupees: int = 5000
+    recommended_action: str = ""
+    # Frontend aliases for full cross-compatibility
+    risk_factors: list[str] = Field(default_factory=list)
+    recommendations: list[str] = Field(default_factory=list)
+    score: int = 80
 
 class PolicyRecommendationItem(BaseModel):
     type: str

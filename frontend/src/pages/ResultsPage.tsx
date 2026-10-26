@@ -565,8 +565,145 @@ export const ResultsPage: React.FC = () => {
 
   if (!result) return null;
 
+  const openDedicatedPrintableWindow = () => {
+    if (!result) return;
+    const printWin = window.open('', '_blank', 'width=920,height=850');
+    if (!printWin) {
+      window.print();
+      return;
+    }
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>ClaimSense_Audit_Report_${result.estimate_id}</title>
+  <style>
+    @page { size: A4 portrait; margin: 12mm 15mm 15mm 15mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #0f172a; padding: 20px; margin: 0; background: #fff; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 18px; }
+    .brand { font-size: 18px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; }
+    .badge { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; margin-left: 6px; }
+    .meta { font-size: 11px; color: #475569; margin-top: 4px; line-height: 1.4; }
+    .cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .card { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; }
+    .card.insurer { background: #f0fdf4 !important; border-color: #86efac; }
+    .card.family { background: #fff1f2 !important; border-color: #fca5a5; }
+    .card-title { font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748b; }
+    .card-val { font-size: 20px; font-weight: 900; margin-top: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 11px; }
+    th, td { border: 1px solid #cbd5e1; padding: 6px 10px; text-align: left; }
+    th { background: #f8fafc !important; font-weight: 700; }
+    .step-box { background: #f8fafc !important; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px; margin-bottom: 8px; font-size: 11px; page-break-inside: avoid; }
+    .step-formula { font-family: monospace; background: #ffffff !important; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 4px; margin-top: 4px; font-size: 10.5px; }
+    .letter { background: #f8fafc !important; border: 1px solid #cbd5e1; padding: 14px; border-radius: 6px; font-family: monospace; white-space: pre-wrap; font-size: 10.5px; line-height: 1.45; }
+    .actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 16px; }
+    button { padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 12px; }
+    @media print { .no-print { display: none !important; } body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <div class="actions no-print">
+    <button onclick="window.print()" style="background: #0f172a; color: white;">Print / Save as PDF</button>
+    <button onclick="window.close()" style="background: #e2e8f0; color: #0f172a;">Close</button>
+  </div>
+  <div class="header">
+    <div>
+      <div class="brand">ClaimSense <span class="badge">IRDAI Master Circular 2024 Audit</span></div>
+      <div class="meta">
+        Hospital: <strong>${input.hospital_name || 'Hospital Admission'}</strong> | Room: <strong>${input.room_category} (${input.room_days} days)</strong><br/>
+        Policy: <strong>${policy?.policy_name || 'Health Policy'} (${policy?.insurer_name || ''})</strong>
+      </div>
+    </div>
+    <div style="text-align: right;" class="meta">
+      <div>Audit Ref: <strong>${result.estimate_id}</strong></div>
+      <div>Date: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+      <div style="color: #059669; font-weight: 700;">Deterministic Arithmetic Verified</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-title">Total Estimated Hospital Bill</div>
+      <div class="card-val">${formatRupees(result.total_bill_paise)}</div>
+      <div class="meta">${input.room_days} days @ ${formatRupees(input.room_rate_per_day_paise)}/day</div>
+    </div>
+    <div class="card insurer">
+      <div class="card-title" style="color: #166534;">Insurer Payment</div>
+      <div class="card-val" style="color: #16a34a;">${formatRupees(result.insurer_payment_paise)}</div>
+      <div class="meta" style="color: #166534;">Approved under policy sub-limits</div>
+    </div>
+    <div class="card family">
+      <div class="card-title" style="color: #9f1239;">Family Out-of-Pocket</div>
+      <div class="card-val" style="color: #e11d48;">${formatRupees(result.family_payment_paise)}</div>
+      <div class="meta" style="color: #9f1239;">Direct difference + proportionate loss</div>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 16px;">
+    <h3 style="margin-bottom: 6px; font-size: 13px;">Key Deduction Breakdown</h3>
+    <table>
+      <tr>
+        <th>Room Limit Ratio</th>
+        <th>Eligible Room Charges</th>
+        <th>Proportionate Deduction Penalty</th>
+        <th>Co-payment Share</th>
+      </tr>
+      <tr>
+        <td><strong>${result.room_limit_ratio?.toFixed(2) || '1.00'}</strong></td>
+        <td>${formatRupees(result.eligible_room_charges_paise)}</td>
+        <td style="color: #e11d48; font-weight: 700;">-${formatRupees(result.other_charges_paise - result.adjusted_other_charges_paise)}</td>
+        <td>-${formatRupees(result.copay_deduction_paise)}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="margin-bottom: 18px;">
+    <h3 style="margin-bottom: 6px; font-size: 13px;">Deterministic Step-by-Step Audit Trail</h3>
+    ${result.calculation_steps.map((st: any) => `
+      <div class="step-box">
+        <div style="display: flex; justify-content: space-between; font-weight: 700;">
+          <span>Step ${st.step_number}: ${st.title}</span>
+          <span style="font-size: 9.5px; color: #64748b; font-family: monospace;">${st.rule_reference}</span>
+        </div>
+        <div class="step-formula">${st.formula}</div>
+        <div style="margin-top: 4px; display: flex; justify-content: space-between; color: #1e3a8a;">
+          <span>${st.result_text}</span>
+          ${st.impact_paise !== undefined && st.impact_paise !== null ? `<strong>${formatRupees(st.impact_paise)}</strong>` : ''}
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  ${negotiationScript ? `
+    <div style="page-break-before: always; margin-top: 18px;">
+      <h3 style="margin-bottom: 6px; font-size: 13px;">Hospital Unbundling Pre-Admission Dispute Letter</h3>
+      <div class="letter">${negotiationScript.formal_letter_body}</div>
+    </div>
+  ` : ''}
+
+  <div style="margin-top: 20px; font-size: 9.5px; color: #64748b; border-top: 1px solid #cbd5e1; padding-top: 8px;">
+    ClaimSense is an independent patient transparency tool designed to simulate health insurance policy clauses deterministically. Final claim adjudication is subject to insurer and TPA approval.
+  </div>
+</body>
+</html>`;
+    printWin.document.write(html);
+    printWin.document.close();
+    printWin.focus();
+    setTimeout(() => {
+      printWin.print();
+    }, 300);
+  };
+
   const handlePrint = () => {
-    window.print();
+    setExpandedTrace(true);
+    setTimeout(() => {
+      try {
+        window.print();
+      } catch (err) {
+        console.warn('In-page window.print failed, opening dedicated printable window fallback:', err);
+        openDedicatedPrintableWindow();
+      }
+    }, 150);
   };
 
   const lang = language;
@@ -598,26 +735,45 @@ export const ResultsPage: React.FC = () => {
 
           <button
             onClick={handlePrint}
-            className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-xs"
+            title="Print or Save as PDF"
+            className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-colors flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>{i('print_report', lang)}</span>
+          </button>
+
+          <button
+            onClick={openDedicatedPrintableWindow}
+            title="Open Clean Standalone Printable Window"
+            className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs transition-colors flex items-center gap-1 border border-slate-300 cursor-pointer"
+          >
+            <FileText className="w-3.5 h-3.5 text-slate-500" />
+            <span className="hidden sm:inline">Clean PDF View</span>
           </button>
         </div>
       </div>
 
       {/* Printable Report Header */}
-      <div className="hidden print:block pb-4 mb-4 border-b border-slate-300">
+      <div className="print-only pb-4 mb-6 border-b-2 border-slate-900">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-xl font-black text-slate-900">ClaimSense Pre-Admission Insurance Estimate</h1>
-            <p className="text-xs text-slate-500">
-              Hospital: {input.hospital_name || 'Hospital Admission'} | Policy: {policy?.policy_name}
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-xl tracking-tight text-slate-900">ClaimSense</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-800 border border-slate-300">
+                Pre-Admission Claim Audit
+              </span>
+            </div>
+            <p className="text-xs text-slate-600 mt-1">
+              Hospital: <strong>{input.hospital_name || 'Hospital Admission'}</strong> | Room: <strong>{input.room_category} ({input.room_days} days)</strong> | Policy: <strong>{policy?.policy_name} ({policy?.insurer_name})</strong>
+            </p>
+            <p className="text-[10px] text-slate-500">
+              IRDAI Master Circular 2024 • Deterministic Mathematical Simulation • Zero Cloud Leakage
             </p>
           </div>
-          <div className="text-right text-xs text-slate-500">
-            <p>Date: {new Date().toLocaleDateString('en-IN')}</p>
-            <p className="font-mono">Estimate Ref: {result.estimate_id}</p>
+          <div className="text-right text-xs text-slate-600">
+            <p className="font-mono font-bold text-slate-900">Ref: {result.estimate_id}</p>
+            <p>Date: {new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+            <p className="text-[10px] text-emerald-700 font-semibold">Status: Verified Deterministic</p>
           </div>
         </div>
       </div>
@@ -769,11 +925,10 @@ export const ResultsPage: React.FC = () => {
               <button
                 key={lng}
                 onClick={() => setLanguage(lng)}
-                className={`px-2.5 py-1 rounded font-semibold transition-colors ${
-                  language === lng
+                className={`px-2.5 py-1 rounded font-semibold transition-colors ${language === lng
                     ? 'bg-white text-blue-700 shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 {lng === 'en' ? 'English' : lng === 'hi' ? 'हिंदी' : 'मराठी'}
               </button>
@@ -819,7 +974,7 @@ export const ResultsPage: React.FC = () => {
       </div>
 
       {/* AI Billing Negotiation Assistant & Unbundling Letter */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 no-print">
+      <div className={`bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4 ${showNegotiation && negotiationScript ? 'printable-card' : 'no-print'}`}>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-purple-50 text-purple-700 border border-purple-200">
@@ -910,8 +1065,8 @@ Patient / Insured Attendant
               {loadingNegotiation
                 ? i('generating_letter', lang)
                 : showNegotiation
-                ? i('hide_letter', lang)
-                : i('generate_letter', lang)}
+                  ? i('hide_letter', lang)
+                  : i('generate_letter', lang)}
             </span>
           </button>
         </div>
@@ -934,9 +1089,9 @@ Patient / Insured Attendant
             </div>
 
             {/* Formal Letter */}
-            <div className="relative bg-slate-900 text-slate-100 rounded-xl p-4 font-mono text-xs overflow-x-auto shadow-inner">
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
-                <span className="text-[11px] text-slate-400 uppercase tracking-wider font-sans font-bold">
+            <div className="relative bg-slate-900 text-slate-100 print:bg-white print:text-slate-900 print:border print:border-slate-300 rounded-xl p-4 font-mono text-xs overflow-x-auto shadow-inner">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-700 print:border-slate-300">
+                <span className="text-[11px] text-slate-400 print:text-slate-600 uppercase tracking-wider font-sans font-bold">
                   {i('letter_heading', lang)}
                 </span>
                 <button
@@ -945,7 +1100,7 @@ Patient / Insured Attendant
                     setCopiedLetter(true);
                     setTimeout(() => setCopiedLetter(false), 2000);
                   }}
-                  className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-sans flex items-center gap-1.5 transition"
+                  className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-sans flex items-center gap-1.5 transition no-print"
                 >
                   {copiedLetter ? (
                     <>
@@ -960,7 +1115,7 @@ Patient / Insured Attendant
                   )}
                 </button>
               </div>
-              <pre className="whitespace-pre-wrap leading-relaxed text-slate-300">
+              <pre className="whitespace-pre-wrap leading-relaxed text-slate-300 print:text-slate-900">
                 {negotiationScript.formal_letter_body}
               </pre>
             </div>
@@ -1063,8 +1218,8 @@ Patient / Insured Attendant
             {lang === 'hi'
               ? 'अनुशंसाएं उपलब्ध नहीं हैं।'
               : lang === 'mr'
-              ? 'शिफारसी उपलब्ध नाहीत.'
-              : 'No recommendations available.'}
+                ? 'शिफारसी उपलब्ध नाहीत.'
+                : 'No recommendations available.'}
           </div>
         )}
       </div>

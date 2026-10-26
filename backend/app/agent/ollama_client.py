@@ -609,7 +609,10 @@ Patient / Insured Attendant
             room_limit_risk_summary=summary,
             hidden_penalties=penalties,
             safe_room_threshold_rupees=safe_rupees,
-            recommended_action=action
+            recommended_action=action,
+            risk_factors=penalties,
+            recommendations=[action] if action else [],
+            score=90 if risk_level == "LOW" else 65 if risk_level == "MODERATE" else 35 if risk_level == "HIGH" else 15
         )
 
 ollama_client = OllamaClient()

@@ -153,11 +153,10 @@ export const AICopilotDrawer: React.FC = () => {
                   className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed shadow-sm ${
-                      msg.role === 'user'
+                    className={`max-w-[85%] rounded-2xl p-3.5 text-xs sm:text-sm leading-relaxed shadow-sm ${msg.role === 'user'
                         ? 'bg-emerald-600 text-white rounded-br-none'
                         : 'bg-white text-slate-800 border border-slate-200 rounded-bl-none'
-                    }`}
+                      }`}
                   >
                     <div className="whitespace-pre-wrap">{msg.content}</div>
                     {msg.role === 'assistant' && idx > 0 && (

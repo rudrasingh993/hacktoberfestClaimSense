@@ -11,13 +11,14 @@ import { formatRupees } from '../utils/formatters';
 export const ReviewPage: React.FC = () => {
   const navigate = useNavigate();
   const {
-    input, setInput, policy, setResult,
+    input, setInput, policy, setPolicy, policies, setResult,
     setConfirmationToken, confirmationToken
   } = useEstimate();
 
   const [confirmedByUser, setConfirmedByUser] = useState<boolean>(input.inputs_confirmed);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPolicyModal, setShowPolicyModal] = useState<boolean>(false);
 
   const roomSubtotal = input.room_rate_per_day_paise * input.room_days;
   const totalBill = roomSubtotal + input.other_charges_paise + input.excluded_charges_paise;
@@ -73,9 +74,19 @@ export const ReviewPage: React.FC = () => {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 space-y-6 shadow-xs">
         {/* Policy Section */}
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block mb-2">
-            Insurance Policy Configuration
-          </span>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600 block">
+              Insurance Policy Configuration
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowPolicyModal(true)}
+              className="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 cursor-pointer"
+            >
+              <span>Change Policy</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
             <div className="flex justify-between font-bold text-slate-900 text-sm">
               <span>{policy?.policy_name || 'No Policy Selected'}</span>
@@ -94,7 +105,7 @@ export const ReviewPage: React.FC = () => {
               </div>
               <div>
                 <span className="text-slate-400 block text-[10px]">Proportionate Deductions:</span>
-                <span className="font-semibold text-slate-800">
+                <span className={`font-semibold ${policy?.proportionate_deduction_applicable ? 'text-rose-600' : 'text-emerald-600'}`}>
                   {policy?.proportionate_deduction_applicable ? 'Enforced' : 'Exempt'}
                 </span>
               </div>
@@ -105,6 +116,80 @@ export const ReviewPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Change Policy Modal */}
+        {showPolicyModal && (
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                <div>
+                  <h3 className="font-bold text-slate-900 text-base">Select Different Policy</h3>
+                  <p className="text-xs text-slate-500">Pick any real-world policy to recalculate your estimate</p>
+                </div>
+                <button
+                  onClick={() => setShowPolicyModal(false)}
+                  className="text-slate-400 hover:text-slate-600 text-sm font-bold p-1"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="overflow-y-auto space-y-2.5 flex-1 pr-1">
+                {policies.map((p) => {
+                  const isCur = policy?.policy_id === p.policy_id;
+                  const isReal = !p.policy_id.startsWith('demo-');
+                  return (
+                    <div
+                      key={p.policy_id}
+                      onClick={() => {
+                        setPolicy(p);
+                        setShowPolicyModal(false);
+                      }}
+                      className={`p-3.5 rounded-xl border text-xs cursor-pointer transition ${
+                        isCur
+                          ? 'border-blue-600 bg-blue-50/60 shadow-xs'
+                          : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-slate-900">{p.policy_name}</span>
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">
+                              {p.insurer_name}
+                            </span>
+                            {isReal && (
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold">
+                                Real
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-slate-500 text-[11px] mt-1 line-clamp-2">{p.source_note}</p>
+                        </div>
+                        {isCur && <span className="text-blue-600 font-bold text-xs shrink-0 ml-2">✓ Selected</span>}
+                      </div>
+
+                      <div className="flex gap-4 mt-2 pt-2 border-t border-slate-200/60 text-[11px]">
+                        <span>Room: <strong>{p.room_limit_type === 'none' ? 'No Cap' : p.room_limit_type === 'fixed_daily' ? `${formatRupees(p.room_limit_value)}/d` : `${p.room_limit_value}% SI`}</strong></span>
+                        <span>Prop. Ded: <strong className={p.proportionate_deduction_applicable ? 'text-rose-600' : 'text-emerald-600'}>{p.proportionate_deduction_applicable ? 'Yes' : 'No'}</strong></span>
+                        <span>Co-pay: <strong>{p.copay_percentage || 0}%</strong></span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="pt-2 border-t border-slate-200 flex justify-end">
+                <button
+                  onClick={() => setShowPolicyModal(false)}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Hospital & Room Charges */}
         <div>

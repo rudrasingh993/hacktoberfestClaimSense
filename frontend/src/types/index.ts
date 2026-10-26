@@ -215,9 +215,12 @@ export interface PolicyRiskAnalysisRequest {
 
 export interface PolicyRiskAnalysisResponse {
   risk_level: 'CRITICAL' | 'HIGH' | 'MODERATE' | 'LOW';
-  score: number;
+  score?: number;
   safe_room_threshold_rupees: number | null;
-  risk_factors: string[];
-  recommendations: string[];
-  vulnerability_breakdown: Record<string, string>;
+  risk_factors?: string[];
+  hidden_penalties?: string[];
+  recommendations?: string[];
+  recommended_action?: string;
+  room_limit_risk_summary?: string;
+  vulnerability_breakdown?: Record<string, string>;
 }

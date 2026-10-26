@@ -43,24 +43,21 @@ export const TopNavigation: React.FC = () => {
         <div className="flex items-center gap-3">
           {/* Local AI status badge */}
           <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border ${
-              aiStatus?.ollama_available && aiStatus?.model_available
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium border ${aiStatus?.ollama_available && aiStatus?.model_available
                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                 : aiStatus?.ollama_available
-                ? 'bg-amber-50 text-amber-800 border-amber-200'
-                : 'bg-slate-100 text-slate-700 border-slate-200'
-            }`}
+                  ? 'bg-amber-50 text-amber-800 border-amber-200'
+                  : 'bg-slate-100 text-slate-700 border-slate-200'
+              }`}
           >
             <span className="relative flex h-2 w-2">
               <span
-                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                  aiStatus?.ollama_available ? 'bg-emerald-400' : 'bg-slate-400'
-                }`}
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${aiStatus?.ollama_available ? 'bg-emerald-400' : 'bg-slate-400'
+                  }`}
               />
               <span
-                className={`relative inline-flex rounded-full h-2 w-2 ${
-                  aiStatus?.ollama_available ? 'bg-emerald-500' : 'bg-slate-500'
-                }`}
+                className={`relative inline-flex rounded-full h-2 w-2 ${aiStatus?.ollama_available ? 'bg-emerald-500' : 'bg-slate-500'
+                  }`}
               />
             </span>
             <div className="hidden md:flex items-center gap-1.5">
@@ -85,31 +82,28 @@ export const TopNavigation: React.FC = () => {
             <Globe className="w-3.5 h-3.5 text-slate-500 ml-1.5 hidden sm:block" />
             <button
               onClick={() => setLanguage('en')}
-              className={`px-2 py-1 rounded font-medium transition-colors ${
-                language === 'en'
+              className={`px-2 py-1 rounded font-medium transition-colors ${language === 'en'
                   ? 'bg-white text-blue-700 shadow-xs font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               EN
             </button>
             <button
               onClick={() => setLanguage('hi')}
-              className={`px-2 py-1 rounded font-medium transition-colors ${
-                language === 'hi'
+              className={`px-2 py-1 rounded font-medium transition-colors ${language === 'hi'
                   ? 'bg-white text-blue-700 shadow-xs font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               हिंदी
             </button>
             <button
               onClick={() => setLanguage('mr')}
-              className={`px-2 py-1 rounded font-medium transition-colors ${
-                language === 'mr'
+              className={`px-2 py-1 rounded font-medium transition-colors ${language === 'mr'
                   ? 'bg-white text-blue-700 shadow-xs font-semibold'
                   : 'text-slate-600 hover:text-slate-900'
-              }`}
+                }`}
             >
               मराठी
             </button>

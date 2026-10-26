@@ -10,7 +10,7 @@ import { formatRupees } from '../utils/formatters';
 
 export const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const { aiStatus, loadDemoEstimate } = useEstimate();
+  const { aiStatus, loadDemoEstimate, policies, policy, setPolicy } = useEstimate();
 
   const handleStartDemo = () => {
     loadDemoEstimate();
@@ -78,6 +78,75 @@ export const DashboardPage: React.FC = () => {
               <span>Deterministic Financial Truth</span>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Real-World Policy Quick-Selector */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              <span>Choose Your Health Insurance Policy to Estimate</span>
+            </h2>
+            <p className="text-xs text-slate-500">
+              Select popular real-world Indian health insurance plans to instantly simulate room-rent limits and claim deductions.
+            </p>
+          </div>
+          <Link
+            to="/estimate"
+            className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 self-start sm:self-auto"
+          >
+            <span>View All {policies.length} Policies</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {policies
+            .filter((p) => !p.policy_id.startsWith('demo-'))
+            .slice(0, 6)
+            .map((p) => {
+              const isSel = policy?.policy_id === p.policy_id;
+              return (
+                <div
+                  key={p.policy_id}
+                  onClick={() => {
+                    setPolicy(p);
+                    navigate('/estimate');
+                  }}
+                  className={`p-3.5 rounded-xl border cursor-pointer transition text-xs ${
+                    isSel
+                      ? 'border-blue-600 bg-blue-50/70 shadow-xs'
+                      : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-1.5">
+                    <span className="font-bold text-slate-900 line-clamp-1">{p.policy_name}</span>
+                    {p.room_limit_type === 'none' ? (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 ml-1">
+                        No Cap
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0 ml-1">
+                        Sub-Limit
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[11px] text-slate-500 mb-2">{p.insurer_name}</div>
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px]">
+                    <span className="text-slate-600">
+                      {p.room_limit_type === 'none'
+                        ? 'Any Room Allowed'
+                        : p.room_limit_type === 'fixed_daily'
+                        ? `${formatRupees(p.room_limit_value)}/d`
+                        : `${p.room_limit_value}% SI`}
+                    </span>
+                    <span className="text-blue-600 font-bold hover:underline">Select & Estimate →</span>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
 

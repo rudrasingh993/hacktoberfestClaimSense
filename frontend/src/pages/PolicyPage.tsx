@@ -283,12 +283,15 @@ export const PolicyPage: React.FC = () => {
                   Detected Policy Traps & Vulnerabilities
                 </span>
                 <div className="space-y-1.5">
-                  {riskAnalysis.risk_factors.map((rf, idx) => (
+                  {(riskAnalysis.risk_factors || (riskAnalysis as any).hidden_penalties || []).map((rf: string, idx: number) => (
                     <div key={idx} className="flex items-start gap-2 text-slate-700">
                       <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
                       <span>{rf}</span>
                     </div>
                   ))}
+                  {(!riskAnalysis.risk_factors?.length && !(riskAnalysis as any).hidden_penalties?.length) && (
+                    <div className="text-slate-400 italic text-[11px]">No severe room-rent vulnerability traps detected.</div>
+                  )}
                 </div>
               </div>
 
@@ -298,7 +301,7 @@ export const PolicyPage: React.FC = () => {
                   AI Pre-Admission Recommendations
                 </span>
                 <ul className="list-disc pl-4 space-y-1 text-slate-600">
-                  {riskAnalysis.recommendations.map((rec, idx) => (
+                  {(riskAnalysis.recommendations || ((riskAnalysis as any).recommended_action ? [(riskAnalysis as any).recommended_action] : [])).map((rec: string, idx: number) => (
                     <li key={idx}>{rec}</li>
                   ))}
                 </ul>

@@ -9,7 +9,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code, pre {
+code,
+pre {
   font-family: 'JetBrains Mono', monospace;
 }
 
@@ -18,42 +19,97 @@ code, pre {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
-/* Print Styles for Printable Result Report (Section 4.13) */
+/* Screen visibility helper */
+.print-only {
+  display: none !important;
+}
+
+/* Print Styles for Printable Result Report (A4 Crisp Multi-Page PDF) */
 @media print {
-  /* Hide non-printable navigation, sidebar, actions */
-  header, nav, aside, .no-print, button, .print-hidden {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 12mm 15mm 12mm;
+  }
+
+  html,
+  body,
+  #root,
+  #root > div,
+  .min-h-screen,
+  main,
+  .printable-report {
+    display: block !important;
+    position: static !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10pt !important;
+  }
+
+  /* Force background colors, borders, and colored badges to print accurately */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide non-printable navigation, sidebar, actions, drawers, floating widgets */
+  header,
+  nav,
+  aside,
+  footer,
+  .no-print,
+  button,
+  .print-hidden,
+  #cs-fab,
+  #cs-panel,
+  .fixed,
+  [role="dialog"] {
     display: none !important;
   }
 
-  body {
-    background: white !important;
-    color: black !important;
-    font-size: 11pt;
-    margin: 0;
-    padding: 0;
+  .print-only {
+    display: block !important;
   }
 
   .printable-report {
-    width: 100% !important;
-    max-width: 100% !important;
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+  }
+
+  /* Avoid awkward page cuts in cards and steps */
+  .break-inside-avoid,
+  .printable-card,
+  tr,
+  .space-y-4 > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .page-break {
-    page-break-before: always;
+    break-before: page !important;
+    page-break-before: always !important;
   }
 }
