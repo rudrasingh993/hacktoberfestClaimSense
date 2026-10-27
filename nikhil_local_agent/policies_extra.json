@@ -1,0 +1,101 @@
+{
+  "_comment": "Extra profiles collected from public reference pages on 2026-10-26. These are summaries from comparison sites, not policy wordings. Verify every value against your actual policy before relying on it. Edit sum_insured and copay_percent to match your policy.",
+  "profiles": {
+    "new_india_mediclaim": {
+      "insurer": "New India Assurance",
+      "plan": "Mediclaim",
+      "room_limit_type": "percent_of_sum_insured",
+      "room_limit_value": 1,
+      "sum_insured": 500000,
+      "copay_percent": 0,
+      "proportionate_deduction": true,
+      "source": "Ditto: New India Mediclaim",
+      "url": "https://joinditto.in/health-insurance/new-india-assurance/new-india-mediclaim/",
+      "date": "2026-10-26",
+      "note": "Room limit is 1% of sum insured per day (ICU 2%, not modelled). No co-pay unless you choose a voluntary one. Proportionate deduction can be removed only with a paid add-on."
+    },
+    "new_india_sixty_plus": {
+      "insurer": "New India Assurance",
+      "plan": "Sixty Plus Mediclaim",
+      "room_limit_type": "percent_of_sum_insured",
+      "room_limit_value": 1,
+      "sum_insured": 500000,
+      "copay_percent": 10,
+      "proportionate_deduction": true,
+      "source": "Ditto: Sixty Plus Mediclaim",
+      "url": "https://joinditto.in/health-insurance/new-india-assurance/sixty-plus-mediclaim/",
+      "date": "2026-10-26",
+      "note": "Mandatory 10% co-pay. Room limit 1% of sum insured per day (ICU 2%). Sum insured options are 2, 3 and 5 lakh; edit sum_insured to match yours."
+    },
+    "star_assure_bought_after_61": {
+      "insurer": "Star Health",
+      "plan": "Assure (bought after age 61)",
+      "room_limit_type": "percent_of_sum_insured",
+      "room_limit_value": 1,
+      "sum_insured": 500000,
+      "copay_percent": 10,
+      "proportionate_deduction": true,
+      "source": "Ditto: Star Assure vs Comprehensive",
+      "url": "https://joinditto.in/health-insurance/compare-plans/assure-vs-comprehensive/",
+      "date": "2026-10-26",
+      "note": "Room rent up to 1% of sum insured; 10% co-pay if bought after 61. The source does not say whether proportionate deduction applies, so it is assumed ON. Confirm in your policy wording. Sum insured of 5 lakh is an example."
+    },
+    "star_comprehensive_bought_after_61": {
+      "insurer": "Star Health",
+      "plan": "Comprehensive (bought after age 61)",
+      "room_limit_type": "category",
+      "room_limit_category": "Single private",
+      "copay_percent": 10,
+      "proportionate_deduction": true,
+      "source": "Ditto: Star Assure vs Comprehensive",
+      "url": "https://joinditto.in/health-insurance/compare-plans/assure-vs-comprehensive/",
+      "date": "2026-10-26",
+      "note": "Eligible room is a single private room, taken as the 'Single private' rent in your room_categories. 10% co-pay if bought after 61. Proportionate deduction assumed ON; confirm in your wording."
+    },
+    "hdfc_myhealth_koti_suraksha_after_61": {
+      "insurer": "HDFC ERGO",
+      "plan": "myHealth Koti Suraksha (bought after age 61)",
+      "room_limit_type": "category",
+      "room_limit_category": "Single private",
+      "copay_percent": 20,
+      "proportionate_deduction": true,
+      "source": "Ditto: Senior Citizen Mediclaim vs myHealth Koti Suraksha",
+      "url": "https://joinditto.in/health-insurance/compare-plans/senior-citizen-mediclaim-vs-myhealth-koti-suraksha",
+      "date": "2026-10-26",
+      "note": "Single private room; 20% co-pay if bought after 61. Proportionate deduction assumed ON; confirm in your wording."
+    },
+    "hdfc_optima_secure": {
+      "insurer": "HDFC ERGO",
+      "plan": "Optima Secure",
+      "room_limit_type": "none",
+      "copay_percent": 0,
+      "proportionate_deduction": false,
+      "source": "Ditto: room rent limit article",
+      "url": "https://cdn.joinditto.in/articles/health-insurance/room-rent-limit-in-health-insurance/",
+      "date": "2026-10-26",
+      "note": "No room rent restriction and no mandatory co-pay, so any room is eligible."
+    },
+    "niva_bupa_reassure_2": {
+      "insurer": "Niva Bupa",
+      "plan": "ReAssure 2.0",
+      "room_limit_type": "none",
+      "copay_percent": 0,
+      "proportionate_deduction": false,
+      "source": "Ditto: room rent limit article",
+      "url": "https://cdn.joinditto.in/articles/health-insurance/room-rent-limit-in-health-insurance/",
+      "date": "2026-10-26",
+      "note": "No room rent restriction and no mandatory co-pay. Other ReAssure versions differ (3.0 Classic is general room, 3.0 Elite is single private AC room)."
+    },
+    "care_supreme": {
+      "insurer": "Care Health",
+      "plan": "Supreme",
+      "room_limit_type": "none",
+      "copay_percent": 0,
+      "proportionate_deduction": false,
+      "source": "Ditto: room rent feature article",
+      "url": "https://joinditto.in/articles/health-insurance/room-rent-feature-in-health-insurance",
+      "date": "2026-10-26",
+      "note": "No room rent restriction. The source does not state a co-pay, so 0 is assumed. Verify in your wording."
+    }
+  }
+}

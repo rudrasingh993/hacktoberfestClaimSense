@@ -1,0 +1,48 @@
+{
+  "_comment": "SAMPLE VALUES ONLY. Replace with rules copied from your real policy document. Record the source and date in each profile.",
+  "default_profile": "sample_fixed_room_limit",
+  "profiles": {
+    "sample_fixed_room_limit": {
+      "insurer": "Secure Health Plus (sample, edit me)",
+      "source": "Policy wording, section on room rent (fill in page and date)",
+      "date": "2026-10-26",
+      "room_limit_type": "fixed_per_day",
+      "room_limit_value": 5000,
+      "copay_percent": 10,
+      "proportionate_deduction": true,
+      "sublimits": {
+        "cataract": 40000
+      },
+      "waiting_periods_days": {
+        "pre_existing": 1095,
+        "specific_illness": 730
+      },
+      "non_payable_items": [
+        "consumables",
+        "admission kit",
+        "registration fee"
+      ],
+      "sum_insured": 500000
+    },
+    "sample_percent_limit": {
+      "insurer": "Sample Insurer B (edit me)",
+      "source": "Policy wording (fill in page and date)",
+      "date": "2026-10-26",
+      "room_limit_type": "percent_of_sum_insured",
+      "room_limit_value": 1,
+      "sum_insured": 500000,
+      "copay_percent": 20,
+      "proportionate_deduction": false,
+      "sublimits": {},
+      "waiting_periods_days": {},
+      "non_payable_items": []
+    }
+  },
+  "room_categories": {
+    "General ward": 1500,
+    "Semi-private": 3000,
+    "Single private": 5000,
+    "Deluxe": 8000,
+    "Suite": 12000
+  }
+}
