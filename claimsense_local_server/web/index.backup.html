@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClaimSense - Know your claim before admission</title>
+<style>
+:root{--ink:#17171a;--mut:#6b6b73;--bg:#ebeae8;--card:#fff;--red:#e8452e;--org:#ff8a4c;--yel:#ffd24a;--dark:#161618;--ok:#2e9e6b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Segoe UI",Inter,system-ui,sans-serif;
+background:linear-gradient(160deg,#ff9a56,#e8452e);padding:clamp(8px,3vw,40px)}
+.shell{max-width:1400px;margin:auto;background:var(--bg);border-radius:28px;padding:28px 30px 0;overflow:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.logo i{width:34px;height:34px;border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+.tabs{display:flex;background:#f5f4f2;border-radius:99px;padding:6px;gap:2px}
+.tabs button{border:0;background:none;padding:10px 20px;border-radius:99px;font:inherit;color:var(--mut);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--ink);font-weight:600}
+.me{width:44px;height:44px;border-radius:50%;background:var(--ink)}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:34px 0 26px}
+.hero small{color:var(--red);font-weight:600;letter-spacing:.06em}
+h1{margin:6px 0 0;font-size:clamp(38px,5.4vw,68px);line-height:.95;letter-spacing:-.045em;font-weight:500}
+.pol{display:flex;align-items:center;gap:14px}.pol b{display:block}.pol span{color:var(--mut);font-size:13px}
+.pol i{width:46px;height:46px;border-radius:50%;background:var(--red);flex:none}
+.stat{background:#fff;border-radius:18px;padding:14px 20px;min-width:150px}.stat span{display:block;color:var(--mut);font-size:12px}.stat b{font-size:19px}
+.grid{display:grid;grid-template-columns:1.15fr 1.1fr 1fr;gap:0;border-radius:28px 28px 0 0;overflow:hidden}
+.col{padding:30px 32px 34px}
+.left{background:linear-gradient(150deg,#ff7a45,#e8452e 70%);color:#fff;position:relative}
+.left small,.mid small,.right small{font-size:11px;letter-spacing:.1em;opacity:.85}
+.pill{position:absolute;right:26px;top:26px;border:1px solid rgba(255,255,255,.55);border-radius:99px;padding:7px 14px;font-size:12px}
+.left h2{font-size:clamp(36px,4.2vw,58px);line-height:.95;letter-spacing:-.04em;font-weight:500;margin:54px 0 16px}
+.left p{max-width:340px;margin:0 0 34px;opacity:.92;font-size:15px}
+.sel{background:rgba(255,255,255,.88);color:var(--ink);border-radius:26px;padding:20px 22px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sel label{font-size:12px;color:var(--mut)}
+.rent{display:flex;align-items:baseline;gap:6px;font-size:30px;font-weight:600}
+.rent input,.other input{font:inherit;border:0;background:none;color:inherit;width:6.5ch;padding:0;outline:none;border-bottom:2px dashed #d5d5d8}
+.rent small{font-size:13px;font-weight:400;color:var(--mut);letter-spacing:0;opacity:1}
+.step{display:flex;align-items:center;gap:12px;background:#fff;border-radius:99px;padding:6px 10px;text-align:center;line-height:1.1}
+.step button{width:32px;height:32px;border-radius:50%;border:0;background:#eee;font-size:18px;cursor:pointer}
+.step b{font-size:19px;display:block}.step span{font-size:11px;color:var(--mut)}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:10px;margin:18px 0 8px}
+.chip{border:0;border-radius:16px;padding:12px 6px;background:#f1f0f4;font:inherit;cursor:pointer;text-align:center}
+.chip b{display:block;font-size:15px}.chip span{font-size:11px;color:var(--mut)}
+.chip.on{background:var(--yel)}.chip.over span{color:#b4381f}
+.foot{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.other{margin-top:14px;font-size:13px;color:var(--mut)}.other input{width:10ch;font-weight:600;color:var(--ink);font-size:15px}
+.mid{background:#f4f3f1}.mid small{color:var(--red);opacity:1}
+.mid h3{font-size:30px;font-weight:500;letter-spacing:-.03em;margin:10px 0 28px}
+.badge{float:right;background:#ffe4dc;color:var(--red);border-radius:99px;padding:6px 12px;font-size:11px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}.two>div+div{border-left:1px solid #ddd;padding-left:22px}
+.two span{font-size:12px;color:var(--mut)}.two b{display:block;font-size:clamp(32px,3.6vw,46px);letter-spacing:-.04em;font-weight:500}
+.two .you{color:var(--red)}
+.bar{height:12px;border-radius:99px;margin:20px 0 8px;background:repeating-linear-gradient(135deg,#d8d8d8 0 3px,#eee 3px 7px);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .35s}
+.leg{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.lines{margin-top:26px}.lines div{display:grid;grid-template-columns:1.1fr 1.3fr .8fr;gap:8px;padding:19px 0;border-top:1px solid #ddd;font-size:13px}
+.lines div>b:first-child{text-align:left}.lines div span{color:var(--mut)}.lines div b{text-align:right}
+.right{background:var(--dark);color:#fff}.right small{color:var(--yel);opacity:1}
+.right h3{font-size:clamp(26px,2.6vw,34px);line-height:1.05;letter-spacing:-.03em;font-weight:500;margin:22px 0 12px}
+.right p{color:#b9b9c0;font-size:14px;margin:0 0 22px}
+.sw{background:var(--yel);color:var(--ink);border-radius:22px;padding:18px}
+.sw span{font-size:13px}.sw b{display:block;font-size:26px;letter-spacing:-.03em;margin:4px 0 14px;font-weight:600}
+.sw button,.ex{border:0;border-radius:99px;padding:12px 18px;font:inherit;font-size:13px;cursor:pointer;background:#fff;color:var(--ink)}
+ul{list-style:none;padding:0;margin:24px 0;font-size:13px;color:#cfcfd5;display:grid;gap:10px}
+li:before{content:"\2713";color:var(--ok);margin-right:10px}
+.work{display:none;margin-top:14px;font-size:12px;color:#d5d5da;line-height:1.7;background:#222226;border-radius:14px;padding:14px}
+.work.on{display:block}
+input[type=number]{-moz-appearance:textfield}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#banner{display:none;background:#fff1ee;color:#9c2a16;border-radius:14px;padding:14px 18px;margin:18px 0 0;font-size:14px;line-height:1.5}
+#banner.on{display:block}
+.err{color:#ffb3a5;font-size:13px;min-height:18px;margin-top:8px}
+.disc{font-size:11px;color:#8d8d95;margin-top:14px}
+@media(max-width:980px){.grid{grid-template-columns:1fr}.shell{padding:18px 16px 0}.tabs{order:3;width:100%;overflow:auto}}
+:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="shell">
+<nav><div class="logo"><i>&#9679;</i>ClaimSense</div>
+<div class="tabs"><button>Overview</button><button class="on">Estimator</button><button>Policies</button><button>How it works</button></div>
+<div class="me" aria-hidden="true"></div></nav>
+<div id="banner" role="alert"></div>
+<header class="hero"><div><small>PRE-ADMISSION ESTIMATE</small><h1>Know your claim.<br>Before admission.</h1></div>
+<div class="pol"><i></i><div><b id="ins">Policy</b><span id="pname">Loaded from policy.json</span></div></div>
+<div style="display:flex;gap:14px"><div class="stat"><span>Sum insured</span><b id="si">-</b></div><div class="stat"><span>Co-pay</span><b id="cp">-</b></div></div></header>
+<main class="grid">
+<section class="col left"><small>ROOM CHOICE</small><span class="pill" id="lim"></span>
+<h2>What your room really costs.</h2><p>Your room selection changes more than the room charge. See the full policy effect before you decide.</p>
+<div class="sel"><div class="row"><div><label for="rent">Selected room</label>
+<div class="rent">&#8377;<input id="rent" type="number" min="1" inputmode="numeric"><small>/ day</small></div></div>
+<div class="step"><button id="dn" aria-label="Fewer days">&minus;</button><div><b id="days">3</b><span>days</span></div><button id="up" aria-label="More days">+</button></div></div>
+<div class="chips" id="chips"></div><div class="foot"><span>Within policy</span><span>Higher deduction</span></div>
+<div class="other">Other charges (medicines, tests, doctors) &#8377;<input id="other" type="number" min="0" inputmode="numeric" value="120000"></div></div></section>
+<section class="col mid"><small>YOUR POLICY EFFECT</small><span class="badge" id="ratio"></span>
+<h3>The actual numbers</h3>
+<div class="two"><div><span>Insurer likely pays</span><b id="ipay">-</b></div><div><span>Your estimated share</span><b class="you" id="you">-</b></div></div>
+<div class="bar"><i id="barf" style="width:0"></i></div><div class="leg"><span>Insurer &nbsp; You</span><b id="tot"></b></div>
+<div class="lines" id="lines"></div></section>
+<section class="col right"><small>CLAIMSENSE INSIGHT</small><h3 id="ih">-</h3><p id="ip"></p>
+<div class="sw" id="sw" hidden><span id="swt"></span><b id="swb"></b><button id="pick">Choose covered room</button></div>
+<ul><li>Exact math, not AI guesses</li><li>Missing inputs are always asked</li><li>Runs locally and privately</li></ul>
+<button class="ex" id="ex">Explain this estimate</button><div class="work" id="work"></div><div class="err" id="err" role="alert"></div>
+<div class="disc">Estimate only. Your insurer's final decision applies. Verify rules against your actual policy.</div></section>
+</main></div>
+<script>
+const $=id=>document.getElementById(id),F=n=>"\u20B9"+Math.round(n).toLocaleString("en-IN");
+const K=n=>n>=1000?"\u20B9"+(n%1000?n.toLocaleString("en-IN"):n/1000+"k"):F(n);
+let cfg,st={rent:8000,days:3,other:120000},t;
+const down=()=>{$("banner").classList.add("on");$("banner").innerHTML="<b>Cannot reach the ClaimSense server.</b> In PowerShell run <code>python server.py</code>, then open <code>http://localhost:8000</code>. Do not open index.html by double-clicking."};
+fetch("/api/config").then(r=>r.json()).then(c=>{cfg=c;$("ins").textContent=c.insurer;$("pname").textContent="Profile: "+c.profile;
+$("si").textContent=c.sum_insured?F(c.sum_insured):"-";$("cp").textContent=c.copay+"%";$("lim").textContent="Policy limit "+F(c.limit)+"/day";
+$("rent").value=st.rent;run()}).catch(down);
+function run(){clearTimeout(t);t=setTimeout(async()=>{
+ try{const r=await fetch("/api/estimate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(st)});
+ const d=await r.json();$("err").textContent=r.ok?"":d.error;if(r.ok)draw(d)}catch(e){down()}},120)}
+function draw(d){const i=d.inputs,[r1,r2,r3,r4]=d.results,ratio=i.proportionate?r1.ratio:1;
+ $("days").textContent=i.days;$("ipay").textContent=F(r3.payable);$("you").textContent=F(r4.out_of_pocket);$("tot").textContent="Total bill "+F(i.total_bill);
+ $("barf").style.width=(i.total_bill?r3.payable/i.total_bill*100:0)+"%";$("ratio").textContent=(ratio*100).toFixed(1).replace(/\.0$/,"")+"% payable ratio";
+ $("lines").innerHTML="";[["Room covered",i.days+" \u00D7 "+F(Math.min(i.rent,i.limit)),F(r1.room_payable)],
+ ["Other charges",F(i.other)+" \u00D7 "+ratio,F(r2.other_after_ratio)],["Before co-pay","Room + adjusted charges",F(r2.payable)],
+ [i.copay+"% co-pay","Policy contribution","- "+F(r2.payable-r3.payable)]].forEach(x=>{const e=document.createElement("div");
+ x.forEach((s,k)=>{const n=document.createElement(k?k==2?"b":"span":"b");n.textContent=s;e.append(n)});$("lines").append(e)});
+ $("chips").innerHTML="";d.comparison.forEach(c=>{const b=document.createElement("button"),over=c.rent>i.limit;b.className="chip"+(c.rent==i.rent?" on":"")+(over?" over":"");
+ b.innerHTML="<b></b><span></span>";b.firstChild.textContent=K(c.rent);b.lastChild.textContent=over?"Above limit":"Covered";b.onclick=()=>{st.rent=c.rent;$("rent").value=c.rent;run()};$("chips").append(b)});
+ const over=i.rent>i.limit;$("ih").textContent=!over?"This room is within your limit":i.proportionate?"This room triggers proportionate deduction":"This room is above your room limit";
+ $("ip").textContent=!over?"No room-rent deduction applies. Co-pay still applies.":i.proportionate?"Because your room costs more than the "+F(i.limit)+" limit, only "+(ratio*100).toFixed(1).replace(/\.0$/,"")+"% of related charges are payable.":"Only the room charge is capped. This policy does not scale other charges.";
+ const b=d.best;$("sw").hidden=!b;if(b){$("swt").textContent="Switch to a "+F(b.rent)+" room";$("swb").textContent="Save about "+F(b.saving);$("pick").onclick=()=>{st.rent=b.rent;$("rent").value=b.rent;run()}}
+ $("work").textContent=d.report.join("\n");$("work").style.whiteSpace="pre-wrap"}
+$("rent").oninput=e=>{st.rent=e.target.value===""?null:+e.target.value;run()};
+$("other").oninput=e=>{st.other=e.target.value===""?null:+e.target.value;run()};
+$("dn").onclick=()=>{st.days=Math.max(1,st.days-1);run()};$("up").onclick=()=>{st.days=Math.min(365,st.days+1);run()};
+$("ex").onclick=()=>$("work").classList.toggle("on");
+</script></body></html>

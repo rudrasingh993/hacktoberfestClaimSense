@@ -1,0 +1,107 @@
+:root{--cs-teal:#0B5D5E;--cs-teal-soft:#E4F0EF;--cs-amber:#F2A33A;--cs-line:#e7e5e1}
+
+/* Devanagari-friendly fonts when Hindi or Marathi is selected */
+html[lang="hi"] body,html[lang="hi"] button,html[lang="hi"] input,html[lang="hi"] select,
+html[lang="mr"] body,html[lang="mr"] button,html[lang="mr"] input,html[lang="mr"] select{
+  font-family:"Nirmala UI","Noto Sans Devanagari","Mangal",system-ui,sans-serif}
+
+/* logo */
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em;text-decoration:none;color:inherit}
+.logo i{display:none}
+.logo svg{width:34px;height:34px;flex:none;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.logo:hover svg{transform:rotate(-6deg) scale(1.08)}
+
+/* tabs with icons */
+.tabs button{display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,transform .15s}
+.tabs button .ic{width:18px;height:18px;flex:none;transition:transform .25s,color .2s}
+.tabs button:hover{color:var(--ink)}
+.tabs button:hover .ic{transform:translateY(-2px) scale(1.1)}
+.tabs button.on .ic{color:var(--cs-teal)}
+.tabs button:active{transform:scale(.96)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--cs-teal);outline-offset:2px}
+
+/* language picker */
+.lang{display:inline-flex;align-items:center;gap:4px;margin-left:auto;background:#f5f4f2;border-radius:99px;padding:0 6px 0 14px;color:var(--mut)}
+.lang .ic{width:18px;height:18px;flex:none}
+.lang select{border:0;background:transparent;font:inherit;color:var(--ink);padding:10px 8px 10px 4px;cursor:pointer;border-radius:99px}
+
+/* extra pages */
+.pane{max-width:880px;margin:28px auto;padding:0 20px;line-height:1.6}
+.pane h2{margin:0 0 6px;font-size:26px;letter-spacing:-.01em}
+.pane p{margin:0}
+.pane .card{background:#fff;border:1px solid var(--cs-line);border-radius:14px;padding:18px 20px;margin:14px 0}
+.pane .card b{display:block;margin-bottom:4px}
+.pane table{border-collapse:collapse;width:100%}
+.pane th,.pane td{text-align:left;padding:9px 10px;border-bottom:1px solid #eee;vertical-align:top}
+.pane th{font-weight:600;width:55%;text-transform:capitalize}
+.hero{display:flex;gap:16px;align-items:flex-start}
+.hero>svg{width:56px;height:56px;flex:none}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:14px 0}
+.tile{background:#fff;border:1px solid var(--cs-line);border-radius:14px;padding:16px}
+.tile .ti{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;background:var(--cs-teal-soft);color:var(--cs-teal);margin-bottom:10px}
+.tile .ti .ic{width:22px;height:22px}
+.tile h3{margin:0 0 2px;font-size:16px}
+.tile p{color:var(--mut);font-size:14px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;padding:9px 0}
+.steps li::before{content:counter(s);flex:none;width:26px;height:26px;border-radius:50%;background:var(--cs-teal);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600}
+.btn-main{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border:0;border-radius:99px;background:var(--cs-teal);color:#fff;font:inherit;font-weight:600;cursor:pointer;transition:transform .15s,background .2s}
+.btn-main:hover{background:#094a4b}
+.btn-main:active{transform:scale(.97)}
+.btn-main .ic{width:18px;height:18px}
+.pane-in{animation:csFade .22s ease-out}
+@keyframes csFade{from{opacity:0}to{opacity:1}}
+
+/* chat widget */
+#cs-fab{position:fixed;right:22px;bottom:22px;z-index:9999;width:58px;height:58px;border-radius:50%;border:0;background:var(--cs-teal);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px rgba(11,93,94,.35);transition:transform .2s}
+#cs-fab .ic{width:28px;height:28px}
+#cs-fab:hover{transform:scale(1.07)}
+#cs-fab::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--cs-teal);animation:csPulse 2.2s ease-out 3}
+#cs-fab.open::after{display:none}
+@keyframes csPulse{from{transform:scale(1);opacity:.6}to{transform:scale(1.7);opacity:0}}
+#cs-panel{position:fixed;right:22px;bottom:92px;z-index:9999;width:380px;max-width:calc(100vw - 24px);height:580px;max-height:calc(100vh - 120px);background:#fff;border:1px solid var(--cs-line);border-radius:18px;box-shadow:0 14px 40px rgba(0,0,0,.18);display:none;flex-direction:column;overflow:hidden;font:14px/1.5 system-ui,sans-serif;color:#222}
+#cs-panel.open{display:flex;animation:csFade .18s ease-out}
+#cs-head{display:flex;align-items:center;gap:10px;padding:12px 14px;background:#f5f4f2}
+#cs-head .mk svg{width:30px;height:30px;display:block}
+#cs-head .ht{flex:1;display:flex;flex-direction:column;line-height:1.3}
+#cs-head .ht small{color:#777;font-size:12px}
+#cs-head button{border:0;background:none;cursor:pointer;color:#555;display:grid;place-items:center;padding:6px;border-radius:8px}
+#cs-head button:hover{background:#e9e7e3}
+#cs-head .ic{width:18px;height:18px}
+#cs-msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cs-m{max-width:88%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;word-wrap:break-word}
+.cs-b{background:#f5f4f2;align-self:flex-start;border-bottom-left-radius:4px}
+.cs-u{background:var(--cs-teal);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+#cs-chips{display:flex;gap:6px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid #eee;max-height:96px;overflow:auto}
+#cs-chips button{border:1px solid #ddd;background:#fff;border-radius:99px;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer;transition:background .15s,border-color .15s}
+#cs-chips button:hover{background:var(--cs-teal-soft);border-color:var(--cs-teal)}
+#cs-in{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #eee}
+#cs-in input{flex:1;min-width:0;border:1px solid #ddd;border-radius:99px;padding:9px 14px;font:inherit;outline:none}
+#cs-in input:focus{border-color:var(--cs-teal)}
+#cs-in button{border:0;background:var(--cs-teal);color:#fff;border-radius:50%;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;flex:none}
+#cs-in button .ic{width:18px;height:18px}
+
+/* share panel */
+.share-panel{max-width:880px;margin:24px auto 40px;padding:20px;background:#fff;border:1px solid var(--cs-line);border-radius:14px;line-height:1.5}
+.share-panel h3{margin:0 0 2px;font-size:20px}
+.share-panel .sh-sub{margin:0 0 14px;color:var(--mut)}
+.sh-grid{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start}
+.sh-form label{display:block;margin-bottom:10px}
+.sh-form label span{display:block;font-size:13px;color:var(--mut);margin-bottom:3px}
+.sh-form input{width:100%;box-sizing:border-box;border:1px solid #ddd;border-radius:10px;padding:9px 12px;font:inherit}
+.sh-form input:focus{border-color:var(--cs-teal);outline:none}
+.sh-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+.btn-alt{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border:1px solid var(--cs-teal);border-radius:99px;background:#fff;color:var(--cs-teal);font:inherit;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
+.btn-alt:hover{background:var(--cs-teal-soft)}
+.btn-alt:active{transform:scale(.97)}
+.btn-alt .ic,.sh-actions .btn-main .ic{width:18px;height:18px}
+.sh-actions select{border:1px solid #ddd;border-radius:99px;padding:9px 10px;font:inherit;background:#fff;cursor:pointer}
+.sh-status{min-height:1.5em;margin:10px 0 0;color:var(--cs-teal);font-size:14px}
+#shPrev{width:100%;height:auto;border:1px solid var(--cs-line);border-radius:10px;background:#FBFAF8}
+.cs-actions{display:flex;gap:6px;flex-wrap:wrap;align-self:flex-start}
+.cs-actions button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--cs-teal);background:#fff;color:var(--cs-teal);border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.cs-actions button:hover{background:var(--cs-teal-soft)}
+.cs-actions .ic{width:15px;height:15px}
+@media(max-width:700px){.sh-grid{grid-template-columns:1fr}#shPrev{max-width:340px;margin:0 auto;display:block}}
+@media(max-width:600px){#cs-panel{right:12px;bottom:84px}#cs-fab{right:14px;bottom:14px}.pane h2{font-size:22px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}

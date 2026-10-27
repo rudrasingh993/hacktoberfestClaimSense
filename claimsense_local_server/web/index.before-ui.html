@@ -1,0 +1,338 @@
+﻿<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClaimSense - Know your claim before admission</title>
+<style>
+:root{--ink:#17171a;--mut:#6b6b73;--bg:#ebeae8;--card:#fff;--red:#e8452e;--org:#ff8a4c;--yel:#ffd24a;--dark:#161618;--ok:#2e9e6b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Segoe UI",Inter,system-ui,sans-serif;
+background:linear-gradient(160deg,#ff9a56,#e8452e);padding:clamp(8px,3vw,40px)}
+.shell{max-width:1400px;margin:auto;background:var(--bg);border-radius:28px;padding:28px 30px 0;overflow:hidden}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px}
+.logo i{width:34px;height:34px;border-radius:50%;background:var(--red);display:grid;place-items:center;color:#fff;font-style:normal;font-size:15px}
+.tabs{display:flex;background:#f5f4f2;border-radius:99px;padding:6px;gap:2px}
+.tabs button{border:0;background:none;padding:10px 20px;border-radius:99px;font:inherit;color:var(--mut);cursor:pointer}
+.tabs button.on{background:#fff;color:var(--ink);font-weight:600}
+.me{width:44px;height:44px;border-radius:50%;background:var(--ink)}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin:34px 0 26px}
+.hero small{color:var(--red);font-weight:600;letter-spacing:.06em}
+h1{margin:6px 0 0;font-size:clamp(38px,5.4vw,68px);line-height:.95;letter-spacing:-.045em;font-weight:500}
+.pol{display:flex;align-items:center;gap:14px}.pol b{display:block}.pol span{color:var(--mut);font-size:13px}
+.pol i{width:46px;height:46px;border-radius:50%;background:var(--red);flex:none}
+.stat{background:#fff;border-radius:18px;padding:14px 20px;min-width:150px}.stat span{display:block;color:var(--mut);font-size:12px}.stat b{font-size:19px}
+.grid{display:grid;grid-template-columns:1.15fr 1.1fr 1fr;gap:0;border-radius:28px 28px 0 0;overflow:hidden}
+.col{padding:30px 32px 34px}
+.left{background:linear-gradient(150deg,#ff7a45,#e8452e 70%);color:#fff;position:relative}
+.left small,.mid small,.right small{font-size:11px;letter-spacing:.1em;opacity:.85}
+.pill{position:absolute;right:26px;top:26px;border:1px solid rgba(255,255,255,.55);border-radius:99px;padding:7px 14px;font-size:12px}
+.left h2{font-size:clamp(36px,4.2vw,58px);line-height:.95;letter-spacing:-.04em;font-weight:500;margin:54px 0 16px}
+.left p{max-width:340px;margin:0 0 34px;opacity:.92;font-size:15px}
+.sel{background:rgba(255,255,255,.88);color:var(--ink);border-radius:26px;padding:20px 22px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.sel label{font-size:12px;color:var(--mut)}
+.rent{display:flex;align-items:baseline;gap:6px;font-size:30px;font-weight:600}
+.rent input,.other input{font:inherit;border:0;background:none;color:inherit;width:6.5ch;padding:0;outline:none;border-bottom:2px dashed #d5d5d8}
+.rent small{font-size:13px;font-weight:400;color:var(--mut);letter-spacing:0;opacity:1}
+.step{display:flex;align-items:center;gap:12px;background:#fff;border-radius:99px;padding:6px 10px;text-align:center;line-height:1.1}
+.step button{width:32px;height:32px;border-radius:50%;border:0;background:#eee;font-size:18px;cursor:pointer}
+.step b{font-size:19px;display:block}.step span{font-size:11px;color:var(--mut)}
+.chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:10px;margin:18px 0 8px}
+.chip{border:0;border-radius:16px;padding:12px 6px;background:#f1f0f4;font:inherit;cursor:pointer;text-align:center}
+.chip b{display:block;font-size:15px}.chip span{font-size:11px;color:var(--mut)}
+.chip.on{background:var(--yel)}.chip.over span{color:#b4381f}
+.foot{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.other{margin-top:14px;font-size:13px;color:var(--mut)}.other input{width:10ch;font-weight:600;color:var(--ink);font-size:15px}
+.mid{background:#f4f3f1}.mid small{color:var(--red);opacity:1}
+.mid h3{font-size:30px;font-weight:500;letter-spacing:-.03em;margin:10px 0 28px}
+.badge{float:right;background:#ffe4dc;color:var(--red);border-radius:99px;padding:6px 12px;font-size:11px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}.two>div+div{border-left:1px solid #ddd;padding-left:22px}
+.two span{font-size:12px;color:var(--mut)}.two b{display:block;font-size:clamp(32px,3.6vw,46px);letter-spacing:-.04em;font-weight:500}
+.two .you{color:var(--red)}
+.bar{height:12px;border-radius:99px;margin:20px 0 8px;background:repeating-linear-gradient(135deg,#d8d8d8 0 3px,#eee 3px 7px);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .35s}
+.leg{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
+.lines{margin-top:26px}.lines div{display:grid;grid-template-columns:1.1fr 1.3fr .8fr;gap:8px;padding:19px 0;border-top:1px solid #ddd;font-size:13px}
+.lines div>b:first-child{text-align:left}.lines div span{color:var(--mut)}.lines div b{text-align:right}
+.right{background:var(--dark);color:#fff}.right small{color:var(--yel);opacity:1}
+.right h3{font-size:clamp(26px,2.6vw,34px);line-height:1.05;letter-spacing:-.03em;font-weight:500;margin:22px 0 12px}
+.right p{color:#b9b9c0;font-size:14px;margin:0 0 22px}
+.sw{background:var(--yel);color:var(--ink);border-radius:22px;padding:18px}
+.sw span{font-size:13px}.sw b{display:block;font-size:26px;letter-spacing:-.03em;margin:4px 0 14px;font-weight:600}
+.sw button,.ex{border:0;border-radius:99px;padding:12px 18px;font:inherit;font-size:13px;cursor:pointer;background:#fff;color:var(--ink)}
+ul{list-style:none;padding:0;margin:24px 0;font-size:13px;color:#cfcfd5;display:grid;gap:10px}
+li:before{content:"\2713";color:var(--ok);margin-right:10px}
+.work{display:none;margin-top:14px;font-size:12px;color:#d5d5da;line-height:1.7;background:#222226;border-radius:14px;padding:14px}
+.work.on{display:block}
+input[type=number]{-moz-appearance:textfield}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#banner{display:none;background:#fff1ee;color:#9c2a16;border-radius:14px;padding:14px 18px;margin:18px 0 0;font-size:14px;line-height:1.5}
+#banner.on{display:block}
+.err{color:#ffb3a5;font-size:13px;min-height:18px;margin-top:8px}
+.disc{font-size:11px;color:#8d8d95;margin-top:14px}
+@media(max-width:980px){.grid{grid-template-columns:1fr}.shell{padding:18px 16px 0}.tabs{order:3;width:100%;overflow:auto}}
+:focus-visible{outline:3px solid var(--yel);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div class="shell">
+<nav><div class="logo"><i>&#9679;</i>ClaimSense</div>
+<div class="tabs"><button>Overview</button><button class="on">Estimator</button><button>Policies</button><button>How it works</button></div>
+<div class="me" aria-hidden="true"></div></nav>
+<div id="banner" role="alert"></div>
+<header class="hero"><div><small>PRE-ADMISSION ESTIMATE</small><h1>Know your claim.<br>Before admission.</h1></div>
+<div class="pol"><i></i><div><b id="ins">Policy</b><span id="pname">Loaded from policy.json</span></div></div>
+<div style="display:flex;gap:14px"><div class="stat"><span>Sum insured</span><b id="si">-</b></div><div class="stat"><span>Co-pay</span><b id="cp">-</b></div></div></header>
+<main class="grid">
+<section class="col left"><small>ROOM CHOICE</small><span class="pill" id="lim"></span>
+<h2>What your room really costs.</h2><p>Your room selection changes more than the room charge. See the full policy effect before you decide.</p>
+<div class="sel"><div class="row"><div><label for="rent">Selected room</label>
+<div class="rent">&#8377;<input id="rent" type="number" min="1" inputmode="numeric"><small>/ day</small></div></div>
+<div class="step"><button id="dn" aria-label="Fewer days">&minus;</button><div><b id="days">3</b><span>days</span></div><button id="up" aria-label="More days">+</button></div></div>
+<div class="chips" id="chips"></div><div class="foot"><span>Within policy</span><span>Higher deduction</span></div>
+<div class="other">Other charges (medicines, tests, doctors) &#8377;<input id="other" type="number" min="0" inputmode="numeric" value="120000"></div></div></section>
+<section class="col mid"><small>YOUR POLICY EFFECT</small><span class="badge" id="ratio"></span>
+<h3>The actual numbers</h3>
+<div class="two"><div><span>Insurer likely pays</span><b id="ipay">-</b></div><div><span>Your estimated share</span><b class="you" id="you">-</b></div></div>
+<div class="bar"><i id="barf" style="width:0"></i></div><div class="leg"><span>Insurer &nbsp; You</span><b id="tot"></b></div>
+<div class="lines" id="lines"></div></section>
+<section class="col right"><small>CLAIMSENSE INSIGHT</small><h3 id="ih">-</h3><p id="ip"></p>
+<div class="sw" id="sw" hidden><span id="swt"></span><b id="swb"></b><button id="pick">Choose covered room</button></div>
+<ul><li>Exact math, not AI guesses</li><li>Missing inputs are always asked</li><li>Runs locally and privately</li></ul>
+<button class="ex" id="ex">Explain this estimate</button><div class="work" id="work"></div><div class="err" id="err" role="alert"></div>
+<div class="disc">Estimate only. Your insurer's final decision applies. Verify rules against your actual policy.</div></section>
+</main></div>
+<script>
+const $=id=>document.getElementById(id),F=n=>"\u20B9"+Math.round(n).toLocaleString("en-IN");
+const K=n=>n>=1000?"\u20B9"+(n%1000?n.toLocaleString("en-IN"):n/1000+"k"):F(n);
+let cfg,st={rent:8000,days:3,other:120000},t;
+const down=()=>{$("banner").classList.add("on");$("banner").innerHTML="<b>Cannot reach the ClaimSense server.</b> In PowerShell run <code>python server.py</code>, then open <code>http://localhost:8000</code>. Do not open index.html by double-clicking."};
+fetch("/api/config").then(r=>r.json()).then(c=>{cfg=c;$("ins").textContent=c.insurer;$("pname").textContent="Profile: "+c.profile;
+$("si").textContent=c.sum_insured?F(c.sum_insured):"-";$("cp").textContent=c.copay+"%";$("lim").textContent="Policy limit "+F(c.limit)+"/day";
+$("rent").value=st.rent;run()}).catch(down);
+function run(){clearTimeout(t);t=setTimeout(async()=>{
+ try{const r=await fetch("/api/estimate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(st)});
+ const d=await r.json();$("err").textContent=r.ok?"":d.error;if(r.ok)draw(d)}catch(e){down()}},120)}
+function draw(d){const i=d.inputs,[r1,r2,r3,r4]=d.results,ratio=i.proportionate?r1.ratio:1;
+ $("days").textContent=i.days;$("ipay").textContent=F(r3.payable);$("you").textContent=F(r4.out_of_pocket);$("tot").textContent="Total bill "+F(i.total_bill);
+ $("barf").style.width=(i.total_bill?r3.payable/i.total_bill*100:0)+"%";$("ratio").textContent=(ratio*100).toFixed(1).replace(/\.0$/,"")+"% payable ratio";
+ $("lines").innerHTML="";[["Room covered",i.days+" \u00D7 "+F(Math.min(i.rent,i.limit)),F(r1.room_payable)],
+ ["Other charges",F(i.other)+" \u00D7 "+ratio,F(r2.other_after_ratio)],["Before co-pay","Room + adjusted charges",F(r2.payable)],
+ [i.copay+"% co-pay","Policy contribution","- "+F(r2.payable-r3.payable)]].forEach(x=>{const e=document.createElement("div");
+ x.forEach((s,k)=>{const n=document.createElement(k?k==2?"b":"span":"b");n.textContent=s;e.append(n)});$("lines").append(e)});
+ $("chips").innerHTML="";d.comparison.forEach(c=>{const b=document.createElement("button"),over=c.rent>i.limit;b.className="chip"+(c.rent==i.rent?" on":"")+(over?" over":"");
+ b.innerHTML="<b></b><span></span>";b.firstChild.textContent=K(c.rent);b.lastChild.textContent=over?"Above limit":"Covered";b.onclick=()=>{st.rent=c.rent;$("rent").value=c.rent;run()};$("chips").append(b)});
+ const over=i.rent>i.limit;$("ih").textContent=!over?"This room is within your limit":i.proportionate?"This room triggers proportionate deduction":"This room is above your room limit";
+ $("ip").textContent=!over?"No room-rent deduction applies. Co-pay still applies.":i.proportionate?"Because your room costs more than the "+F(i.limit)+" limit, only "+(ratio*100).toFixed(1).replace(/\.0$/,"")+"% of related charges are payable.":"Only the room charge is capped. This policy does not scale other charges.";
+ const b=d.best;$("sw").hidden=!b;if(b){$("swt").textContent="Switch to a "+F(b.rent)+" room";$("swb").textContent="Save about "+F(b.saving);$("pick").onclick=()=>{st.rent=b.rent;$("rent").value=b.rent;run()}}
+ $("work").textContent=d.report.join("\n");$("work").style.whiteSpace="pre-wrap"}
+$("rent").oninput=e=>{st.rent=e.target.value===""?null:+e.target.value;run()};
+$("other").oninput=e=>{st.other=e.target.value===""?null:+e.target.value;run()};
+$("dn").onclick=()=>{st.days=Math.max(1,st.days-1);run()};$("up").onclick=()=>{st.days=Math.min(365,st.days+1);run()};
+$("ex").onclick=()=>$("work").classList.toggle("on");
+</script><script id="tabs-patch">
+(function(){
+  var nav=document.querySelector('nav'); if(!nav) return;
+  var btns=nav.querySelectorAll('.tabs button'); if(btns.length<4) return;
+  function collect(from){var a=[],n=from.nextElementSibling;
+    while(n){ if(!/^(SCRIPT|STYLE)$/.test(n.tagName)) a.push(n); n=n.nextElementSibling;} return a;}
+  var kids=collect(nav), host=nav.parentElement;
+  if(!kids.length){ kids=collect(nav.parentElement); host=nav.parentElement.parentElement; }
+  if(!kids.length) return;
+  var est=document.createElement('div'); est.id='view-estimator';
+  kids[0].parentNode.insertBefore(est,kids[0]);
+  kids.forEach(function(k){est.appendChild(k);});
+
+  var st=document.createElement('style');
+  st.textContent='.pane{max-width:860px;margin:28px auto;padding:0 16px;line-height:1.6}'+
+  '.pane h2{margin:0 0 8px}.pane .card{background:#fff;border:1px solid #e7e5e1;border-radius:16px;padding:18px 20px;margin:14px 0}'+
+  '.pane table{border-collapse:collapse;width:100%}.pane td,.pane th{text-align:left;padding:8px 10px;border-bottom:1px solid #eee}'+
+  '.pane ol{padding-left:20px}';
+  document.head.appendChild(st);
+
+  function pane(id,html){var d=document.createElement('div');d.className='pane';d.id=id;d.style.display='none';d.innerHTML=html;
+    est.parentNode.insertBefore(d,est.nextSibling);return d;}
+
+  var overview=pane('view-overview',
+   '<h2>Overview</h2><div class="card">ClaimSense estimates how much of a hospital bill you will pay out of pocket, given your policy terms: room rent limit, co-pay and sub-limits.</div>'+
+   '<div class="card"><b>Why it matters</b><br>If your room costs more than the policy allows, insurers cut the whole bill in proportion, not just the room line. ClaimSense shows that hidden cut before you choose a room.</div>'+
+   '<div class="card"><button id="goEst" style="padding:10px 20px;border:0;border-radius:99px;background:#222;color:#fff;cursor:pointer">Open Estimator</button></div>');
+  var how=pane('view-how',
+   '<h2>How it works</h2><div class="card"><ol>'+
+   '<li>Pick a room rent per day and number of days.</li>'+
+   '<li>Add other charges (surgery, medicines, tests).</li>'+
+   '<li>If the room rent is above the policy limit, every covered charge is reduced by the same ratio (proportional deduction).</li>'+
+   '<li>The co-pay percentage is applied on the remaining covered amount.</li>'+
+   '<li>What is left is your estimated share.</li></ol></div>'+
+   '<div class="card">Example: room Rs 8,000 x 3 days, other charges Rs 1,20,000, limit Rs 5,000/day, co-pay 10% gives Rs 63,000. With a Rs 5,000 room it drops to Rs 13,500.</div>');
+  var pol=pane('view-policies','<h2>Policies</h2><div class="card" id="polBody">Loading policy...</div>');
+
+  function render(o){
+    var rows='';
+    (function walk(x,p){
+      Object.keys(x).forEach(function(k){var v=x[k],key=p?p+' / '+k:k;
+        if(v&&typeof v==='object'&&!Array.isArray(v)) walk(v,key);
+        else rows+='<tr><th>'+key+'</th><td>'+(Array.isArray(v)?v.join(', '):v)+'</td></tr>';});
+    })(o,'');
+    document.getElementById('polBody').innerHTML='<table>'+rows+'</table>';
+  }
+  var urls=['/policy.json','/api/policy','policy.json'];
+  (function tryNext(i){
+    if(i>=urls.length){document.getElementById('polBody').textContent='Policy details could not be loaded from the server. The estimator still uses policy.json internally.';return;}
+    fetch(urls[i]).then(function(r){if(!r.ok)throw 0;return r.json();}).then(render).catch(function(){tryNext(i+1);});
+  })(0);
+
+  var views={0:overview,1:est,2:pol,3:how};
+  function show(i){
+    Object.keys(views).forEach(function(k){views[k].style.display=(+k===i)?'':'none';});
+    btns.forEach(function(b,j){b.classList.toggle('on',j===i);});
+    try{history.replaceState(null,'','#'+['overview','estimator','policies','how'][i]);}catch(e){}
+  }
+  btns.forEach(function(b,i){b.addEventListener('click',function(){show(i);});});
+  document.getElementById('goEst').addEventListener('click',function(){show(1);});
+  var h=(location.hash||'').replace('#','');
+  var idx=['overview','estimator','policies','how'].indexOf(h);
+  show(idx<0?1:idx);
+})();
+</script>
+<style id="chat-style">
+#cs-fab{position:fixed;right:22px;bottom:22px;z-index:9999;width:58px;height:58px;border-radius:50%;border:0;background:#222;color:#fff;font-size:26px;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+#cs-panel{position:fixed;right:22px;bottom:92px;z-index:9999;width:380px;max-width:calc(100vw - 24px);height:560px;max-height:calc(100vh - 120px);background:#fff;border:1px solid #e7e5e1;border-radius:20px;box-shadow:0 12px 40px rgba(0,0,0,.2);display:none;flex-direction:column;overflow:hidden;font:14px/1.5 system-ui,sans-serif;color:#222}
+#cs-panel.open{display:flex}
+#cs-head{padding:14px 16px;background:#f5f4f2;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+#cs-head small{font-weight:400;color:#777}
+#cs-head button{border:0;background:none;font-size:18px;cursor:pointer;color:#555}
+#cs-msgs{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.cs-m{max-width:88%;padding:9px 12px;border-radius:14px;white-space:pre-wrap;word-wrap:break-word}
+.cs-b{background:#f5f4f2;align-self:flex-start;border-bottom-left-radius:4px}
+.cs-u{background:#222;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+#cs-chips{display:flex;gap:6px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid #eee}
+#cs-chips button{border:1px solid #ddd;background:#fff;border-radius:99px;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer}
+#cs-chips button:hover{background:#f5f4f2}
+#cs-in{display:flex;gap:8px;padding:10px 12px;border-top:1px solid #eee}
+#cs-in input{flex:1;border:1px solid #ddd;border-radius:99px;padding:9px 14px;font:inherit;outline:none}
+#cs-in button{border:0;background:#222;color:#fff;border-radius:99px;padding:0 16px;cursor:pointer;font:inherit}
+</style>
+<script id="chat-patch">
+(function(){
+  var S={limit:5000,copay:10,last:null,hist:[],model:'gemma4:e4b'};
+  var RS='\u20B9';
+  function rs(n){return RS+Math.round(n).toLocaleString('en-IN');}
+  var N='[\u20B9rs.\\s]*(\\d[\\d,]*(?:\\.\\d+)?)\\s*(k|lakh|lac)?';
+  function pick(re,t){var m=t.match(re);if(!m)return NaN;var v=parseFloat(m[1].replace(/,/g,''));var u=(m[2]||'').toLowerCase();if(u==='k')v*=1000;else if(u)v*=100000;return v;}
+  function calc(room,days,other,copay,limit){
+    var total=room*days+other, ratio=Math.min(1,limit/room);
+    var afterDed=total*ratio, insurer=afterDed*(1-copay/100), patient=total-insurer;
+    return {room:room,days:days,other:other,copay:copay,limit:limit,total:total,ratio:ratio,deducted:total-afterDed,insurer:insurer,patient:patient};
+  }
+  function fmt(r){
+    var s='Estimate\n';
+    s+='Room: '+rs(r.room)+' x '+r.days+' days = '+rs(r.room*r.days)+'\n';
+    s+='Other charges: '+rs(r.other)+'\n';
+    s+='Total bill: '+rs(r.total)+'\n';
+    if(r.ratio<1){s+='Room rent is above your limit of '+rs(r.limit)+'/day, so the whole bill is cut to '+(r.ratio*100).toFixed(1)+'% (proportional deduction): -'+rs(r.deducted)+'\n';}
+    else{s+='Room is within your '+rs(r.limit)+'/day limit: no deduction.\n';}
+    s+='Co-pay '+r.copay+'%\n';
+    s+='Insurer pays: '+rs(r.insurer)+'\n';
+    s+='Your share: '+rs(r.patient);
+    return s;
+  }
+
+  // load policy values if the server exposes them
+  function loadPolicy(){
+    fetch('/policy.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(o){
+      (function walk(x){Object.keys(x).forEach(function(k){var v=x[k];
+        if(v&&typeof v==='object'&&!Array.isArray(v)){walk(v);return;}
+        if(typeof v!=='number')return;
+        if(/co-?pay/i.test(k)){S.copay=v<=1?v*100:v;}
+        else if(/(room|rent).*(limit|cap|max)|(limit|cap|max).*(room|rent)|per.?day/i.test(k)){S.limit=v;}
+      });})(o);
+    }).catch(function(){});
+  }
+
+  // ---- UI ----
+  var fab=document.createElement('button');fab.id='cs-fab';fab.title='ClaimSense Assistant';fab.innerHTML='&#128172;';
+  var panel=document.createElement('div');panel.id='cs-panel';
+  panel.innerHTML='<div id="cs-head"><div>ClaimSense Assistant<br><small>Estimates, claim help, hospital questions</small></div><button id="cs-x">&#10005;</button></div><div id="cs-msgs"></div><div id="cs-chips"></div><div id="cs-in"><input id="cs-q" placeholder="Ask or type an estimate..." autocomplete="off"><button id="cs-send">Send</button></div>';
+  document.body.appendChild(fab);document.body.appendChild(panel);
+  var msgs=panel.querySelector('#cs-msgs'),q=panel.querySelector('#cs-q'),chips=panel.querySelector('#cs-chips');
+  function add(text,who){var d=document.createElement('div');d.className='cs-m '+(who==='u'?'cs-u':'cs-b');d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;}
+  var CHIPS=['Room rent 8000 per day for 3 days, other charges 1,20,000, copay 10%','Compare rooms','Safe room rent','Documents checklist','Cashless steps','Questions for hospital','Copy last estimate'];
+  var LABEL={0:'Try sample estimate',1:'Compare rooms',2:'Safe room rent',3:'Documents checklist',4:'Cashless steps',5:'Questions for hospital',6:'Copy last estimate'};
+  CHIPS.forEach(function(c,i){var b=document.createElement('button');b.textContent=LABEL[i];b.onclick=function(){send(c);};chips.appendChild(b);});
+
+  var DOCS='Documents checklist (claim)\n1. Claim form (hospital + patient parts)\n2. Health card / policy number and ID proof\n3. Doctor admission note and discharge summary\n4. All final bills with itemised breakup\n5. Payment receipts\n6. Investigation and lab reports, prescriptions\n7. Pharmacy bills with prescriptions\n8. Cancelled cheque / bank details (reimbursement)\n9. FIR/MLC copy if it is an accident case';
+  var CASHLESS='Cashless process\n1. Choose a network hospital\n2. At admission, show the health card at the insurance desk\n3. Hospital sends a pre-authorisation request\n4. Insurer approves (full or partial) - note the approved amount\n5. Pay only non-covered items and co-pay at discharge\nPlanned stay: ask for pre-auth 2-3 days before admission.\n\nReimbursement\n1. Pay the bills yourself\n2. Collect all original documents\n3. Submit to insurer or TPA within the deadline in your policy (usually 15-30 days after discharge)\n4. Follow up on the claim number';
+  var ASKH='Ask the hospital before admission\n1. What is the room rent per day for my room category?\n2. Is there a cheaper room that stays within my insurance limit?\n3. Do ICU or OT charges depend on room category?\n4. Estimated total cost, and which items are non-payable?\n5. Surgeon, anaesthetist and package charges - are they fixed?\n6. Is the pre-authorisation done before admission?\n7. What deposit is needed?';
+  var WHY='Proportional deduction\nIf your room rent per day is higher than the policy limit, the insurer reduces many other charges (doctor fees, nursing, OT etc.) in the same ratio, not just the room line.\nRatio = policy limit / actual room rent.\nExample: limit 5,000 and room 8,000 gives 62.5%, so the bill is cut to 62.5% before co-pay.';
+  var HELP='I can:\n- Estimate your share: "room 8000 for 3 days, other 1,20,000, copay 10%"\n- Compare room options for your last estimate\n- Tell the safe room rent: "safe room rent"\n- Change limit/copay: "set limit 4000", "set copay 20%"\n- Explain proportional deduction\n- Share claim documents, cashless steps, questions for the hospital\n- Copy your last estimate\nAnything else goes to the local AI model.';
+
+  function handle(t){
+    var l=t.toLowerCase();
+    var lim=pick(new RegExp('(?:limit|cap)[^\\d]{0,20}'+N,'i'),t);
+    var cp=t.match(/(?:co-?pay[^\d]{0,10}(\d+(?:\.\d+)?))|(?:(\d+(?:\.\d+)?)\s*%\s*co-?pay)/i);
+    var cpv=cp?parseFloat(cp[1]||cp[2]):NaN;
+    var room=pick(new RegExp('room(?:\\s*rent)?[^\\d]{0,20}'+N,'i'),t);
+    var other=pick(new RegExp('other(?:\\s*charges)?[^\\d]{0,20}'+N,'i'),t);
+    var dm=t.match(/(\d+)\s*(?:days?|nights?)/i);var days=dm?parseInt(dm[1],10):NaN;
+
+    if(/^(set|change|update)\b/.test(l)&&(!isNaN(lim)||!isNaN(cpv))){
+      var out=[];if(!isNaN(lim)){S.limit=lim;out.push('Room rent limit = '+rs(lim)+'/day');}
+      if(!isNaN(cpv)){S.copay=cpv;out.push('Co-pay = '+cpv+'%');}
+      return 'Updated: '+out.join(', ')+'. This applies to my calculations in this chat.';
+    }
+    if(!isNaN(room)&&!isNaN(other)){
+      var c=isNaN(cpv)?S.copay:cpv, L=isNaN(lim)?S.limit:lim, d=isNaN(days)?1:days;
+      var r=calc(room,d,other,c,L);S.last=r;
+      var s=fmt(r);
+      if(isNaN(days))s+='\n(Days not given, assumed 1.)';
+      if(r.ratio<1){var save=calc(L,d,other,c,L);s+='\n\nTip: a room at '+rs(L)+'/day would bring your share down to '+rs(save.patient)+' (saves '+rs(r.patient-save.patient)+').';}
+      return s;
+    }
+    if(/copy/.test(l)){
+      if(!S.last)return 'No estimate yet. Type one first, for example: room 8000 for 3 days, other 1,20,000, copay 10%';
+      try{navigator.clipboard.writeText(fmt(S.last));return 'Copied your last estimate to the clipboard.';}catch(e){return fmt(S.last);}
+    }
+    if(/compare|all rooms|which room|room options/.test(l)){
+      if(!S.last)return 'Give me an estimate first (days and other charges), then I will compare rooms. Example: room 8000 for 3 days, other 1,20,000';
+      var rooms=[1500,3000,5000,8000,12000],s2='Room comparison ('+S.last.days+' days, other charges '+rs(S.last.other)+', co-pay '+S.last.copay+'%)\n';
+      rooms.forEach(function(rm){var x=calc(rm,S.last.days,S.last.other,S.last.copay,S.limit);s2+=rs(rm).padEnd(9)+'/day -> your share '+rs(x.patient)+(x.ratio<1?'  (deduction)':'')+'\n';});
+      return s2.trim();
+    }
+    if(/safe|ideal|best room|how much room|maximum room|max room/.test(l)){
+      return 'Your room rent limit is '+rs(S.limit)+'/day. Staying at or below it avoids proportional deduction. Above it, your whole bill shrinks by limit/room (for example '+rs(S.limit*1.6)+'/day gives '+(100/1.6).toFixed(1)+'%).\nAlso check if ICU/suite categories have their own limits in your policy.';
+    }
+    if(/deduction|proportion|why.*(high|more|cut)|reduced/.test(l))return WHY;
+    if(/document|checklist|papers?\b/.test(l))return DOCS;
+    if(/cashless|reimburse|claim process|steps|how to claim/.test(l))return CASHLESS;
+    if(/ask.*hospital|questions/.test(l))return ASKH;
+    if(/^(help|\?|what can you do)/.test(l))return HELP;
+    return null;
+  }
+
+  function llm(t){
+    var sys='You are ClaimSense Assistant, helping people in India understand health insurance claims, room rent limits, co-pay, sub-limits, proportional deduction, cashless and reimbursement claims. Be concise (under 120 words) and practical. Never invent policy numbers or guarantee claim approval; tell the user to check their policy document. Current assumptions: room rent limit '+S.limit+' per day, co-pay '+S.copay+'%.'+(S.last?' Last estimate: patient share '+Math.round(S.last.patient)+' on total '+Math.round(S.last.total)+'.':'')+' For exact numbers ask the user to type: room 8000 for 3 days, other 1,20,000, copay 10%.';
+    var m=[{role:'system',content:sys}].concat(S.hist.slice(-8),[{role:'user',content:t}]);
+    var ctl=new AbortController();var to=setTimeout(function(){ctl.abort();},90000);
+    return fetch('http://localhost:11434/api/chat',{method:'POST',signal:ctl.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({model:S.model,messages:m,stream:false})})
+      .then(function(r){clearTimeout(to);if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(j){var a=(j.message&&j.message.content)||'';S.hist.push({role:'user',content:t},{role:'assistant',content:a});return a||'(empty reply)';});
+  }
+
+  function send(text){
+    text=(text||q.value).trim();if(!text)return;q.value='';add(text,'u');
+    var a=handle(text);
+    if(a!==null){add(a,'b');return;}
+    var w=add('Thinking...','b');
+    llm(text).then(function(x){w.textContent=x;msgs.scrollTop=msgs.scrollHeight;})
+      .catch(function(e){w.textContent='I could not reach the local AI model ('+e.message+'). Make sure Ollama is running and "ollama list" shows '+S.model+'. Calculations and checklists still work without it. Type "help" to see what I can do offline.';});
+  }
+  fab.onclick=function(){panel.classList.toggle('open');if(panel.classList.contains('open'))q.focus();};
+  panel.querySelector('#cs-x').onclick=function(){panel.classList.remove('open');};
+  panel.querySelector('#cs-send').onclick=function(){send();};
+  q.addEventListener('keydown',function(e){if(e.key==='Enter')send();});
+  loadPolicy();
+  setTimeout(function(){add('Hi! I can estimate your out-of-pocket share, compare rooms, explain deductions and guide you through the claim. Type "help" to see everything, or tap a chip below.','b');},50);
+})();
+</script>
+</body></html>
+
+
